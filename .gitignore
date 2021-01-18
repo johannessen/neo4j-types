@@ -1,0 +1,6 @@
+/.build/
+/Neo4j-Types-*
+
+/cover_db
+/Stuff
+*.bbprojectd
