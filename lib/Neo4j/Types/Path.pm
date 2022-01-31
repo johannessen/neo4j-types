@@ -5,13 +5,10 @@ package Neo4j::Types::Path;
 # ABSTRACT: Represents a directed sequence of relationships between two nodes
 
 
-use Carp qw(croak);
-
 
 sub elements {
 	my ($self) = @_;
 	
-	croak 'elements() in scalar context not supported' unless wantarray;
 	return @$self;
 }
 
@@ -19,7 +16,6 @@ sub elements {
 sub nodes {
 	my ($self) = @_;
 	
-	croak 'nodes() in scalar context not supported' unless wantarray;
 	my $i = 0;
 	return grep { ++$i & 1 } @$self;
 }
@@ -28,7 +24,6 @@ sub nodes {
 sub relationships {
 	my ($self) = @_;
 	
-	croak 'relationships() in scalar context not supported' unless wantarray;
 	my $i = 0;
 	return grep { $i++ & 1 } @$self;
 }
@@ -76,6 +71,10 @@ L<Neo4j::Types::Path> implements the following methods.
 Return the path as a list alternating between nodes
 and relationships in path sequence order.
 
+In scalar context, return the number of elements in this path.
+
+ $count = scalar $path->elements;
+
 =head2 nodes
 
  @nodes = $path->nodes;
@@ -89,6 +88,10 @@ returns, the end node is the last one.
  $start_node = $nodes[0];
  $end_node   = $nodes[@nodes - 1];
 
+In scalar context, return the number of nodes in this path.
+
+ $count = scalar $path->nodes;
+
 =head2 relationships
 
  @rels = $path->relationships;
@@ -96,16 +99,10 @@ returns, the end node is the last one.
 Return all L<relationships|Neo4j::Types::Relationship>
 of this path.
 
+In scalar context, return the number of relationships in this path.
 The length of a path is defined as the number of relationships.
 
- @rels = $path->relationships;
- $length = scalar @rels;
-
-=head1 BUGS
-
-The behaviour of the C<elements()>, C<nodes()> and
-C<relationships()> methods when called in scalar context
-has not yet been defined.
+ $length = scalar $path->relationships;
 
 =head1 SEE ALSO
 

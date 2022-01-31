@@ -41,24 +41,24 @@ is_deeply [@e], [], 'deeply rel 0';
 $p = new_path [ @p ];
 @e = $p->elements;
 is_deeply [@e], [@p], 'deeply elements 5';
-throws_ok { my $l = $p->elements } qr/\bscalar context\b/i, 'scalar context elements';
+lives_and { is scalar($p->elements), 5 } 'scalar context elements';
 @e = $p->nodes;
 is_deeply [@e], [$p[0],$p[2],$p[4]], 'deeply nodes 3';
-throws_ok { my $l = $p->nodes } qr/\bscalar context\b/i, 'scalar context nodes';
+lives_and { is scalar($p->nodes), 3 } 'scalar context nodes';
 @e = $p->relationships;
 is_deeply [@e], [$p[1],$p[3]], 'deeply rel 2';
-throws_ok { my $l = $p->relationships } qr/\bscalar context\b/i, 'scalar context relationships';
+lives_and { is scalar($p->relationships), 2 } 'scalar context relationships';
 
 $p = new_path [];
 @e = $p->elements;
 is scalar(@e), 0, 'no elements gigo';
-throws_ok { my $l = $p->elements } qr/\bscalar context\b/i, 'scalar context elements gigo';
+lives_and { is scalar($p->elements), 0 } 'scalar context no elements';
 @e = $p->nodes;
 is scalar(@e), 0, 'no nodes 0 gigo';
-throws_ok { my $l = $p->nodes } qr/\bscalar context\b/i, 'scalar context nodes gigo';
+lives_and { is scalar($p->nodes), 0 } 'scalar context no nodes';
 @e = $p->relationships;
 is scalar(@e), 0, 'no relationships 0 gigo';
-throws_ok { my $l = $p->relationships } qr/\bscalar context\b/i, 'scalar context relationships gigo';
+lives_and { is scalar($p->relationships), 0 } 'scalar context no relationships';
 
 
 done_testing;
