@@ -8,7 +8,7 @@ use Test::Exception;
 use Test::Warnings;
 use Neo4j::Types::Point;
 
-plan tests => 8+2+2 + 8+2+2+2 + 6+6+6+6+1 + 1;
+plan tests => 9+3+3 + 9+3+3+3 + 6+6+6+6+1 + 1;
 
 
 
@@ -28,16 +28,19 @@ is $p->longitude(), 2.294, 'eiffel lon';
 is $p->latitude(), 48.858, 'eiffel lat';
 is $p->height(), 396, 'eiffel ellipsoidal height';
 is_deeply [$p->coordinates], [@c], 'eiffel coords';
+is scalar ($p->coordinates), 3, 'scalar context eiffel coords';
 
 @c = ( 2.294, 48.858, 396 );
 $p = new_point [ 4326, @c ];
 is $p->srid(), 4326, 'eiffel 2d srid';
 is_deeply [$p->coordinates], [@c], 'eiffel 3d coords';
+is scalar ($p->coordinates), 3, 'scalar context eiffel 3d coords';
 
 @c = ( 2.294, 48.858 );
 $p = new_point [ 4979, @c ];
 is $p->srid(), 4979, 'eiffel 3d srid';
 is_deeply [$p->coordinates], [@c], 'eiffel 2d coords';
+is scalar ($p->coordinates), 2, 'scalar context eiffel 2d coords';
 
 
 
@@ -51,21 +54,25 @@ is $p->longitude(), 12, 'plane lon';
 is $p->latitude(), 34, 'plane lat';
 ok ! defined $p->height(), 'plane height';
 is_deeply [$p->coordinates], [@c], 'plane coords';
+is scalar ($p->coordinates), 2, 'scalar context plane coords';
 
 @c = ( 56, 78, 90 );
 $p = new_point [ 9157, @c ];
 is $p->srid(), 9157, 'space srid';
 is_deeply [$p->coordinates], [@c], 'space coords';
+is scalar ($p->coordinates), 3, 'scalar context space coords';
 
 @c = ( 361, -91 );
 $p = new_point [ 4326, @c ];
 is $p->srid(), 4326, 'ootw srid';
 is_deeply [$p->coordinates], [@c], 'ootw coords';
+is scalar ($p->coordinates), 2, 'scalar context ootw coords';
 
 @c = ( 'what', 'ever' );
 $p = new_point [ 'onetwothree', @c ];
 is $p->srid(), 'onetwothree', 'string srid';
 is_deeply [$p->coordinates], [@c], 'string coords';
+is scalar ($p->coordinates), 2, 'scalar context string coords';
 
 
 

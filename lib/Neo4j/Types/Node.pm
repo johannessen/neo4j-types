@@ -5,8 +5,6 @@ package Neo4j::Types::Node;
 # ABSTRACT: Describes a node from a Neo4j graph
 
 
-use Carp qw(croak);
-
 
 sub get {
 	my ($self, $property) = @_;
@@ -26,8 +24,7 @@ sub id {
 sub labels {
 	my ($self) = @_;
 	
-	croak 'labels() in scalar context not supported' unless wantarray;
-	return unless defined $self->{labels};
+	return my @empty unless defined $self->{labels};
 	return @{$self->{labels}};
 }
 
@@ -110,6 +107,10 @@ Nodes and relationships do not share the same ID space.
 
 Return all labels of this node.
 
+In scalar context, return the number of labels on this node.
+
+ $count = scalar $node->labels;
+
 =head2 properties
 
  $hashref = $node->properties;
@@ -117,9 +118,6 @@ Return all labels of this node.
 Return all properties of this node as a hash reference.
 
 =head1 BUGS
-
-The behaviour of the C<labels()> method when called in
-scalar context has not yet been defined.
 
 The behaviour of the C<properties()> method when called
 in list context has not yet been defined.

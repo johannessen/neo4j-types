@@ -31,7 +31,10 @@ sub height    { shift->[3] }
 
 sub srid { shift->[0] }
 
-sub coordinates { @{$_[0]}[ 1 .. $#{$_[0]} ] }
+sub coordinates {
+	my @coordinates = @{$_[0]}[ 1 .. $#{$_[0]} ];
+	return @coordinates;
+}
 
 
 1;
@@ -76,6 +79,12 @@ L<Neo4j::Types::Point> implements the following methods.
  ($x, $y, $z) = @coordinates;
 
 Retrieve the point's coordinates as a list.
+
+In scalar context, return the number of coordinates for this
+point (C<2> for points in two-dimensional coordinate systems,
+C<3> for three-dimensional systems).
+
+ $dimensions = scalar $point->coordinates;
 
 =head2 height
 
@@ -214,9 +223,6 @@ For points in coordinate systems that have no more than two
 dimensions, this method returns an undefined value.
 
 =head1 BUGS
-
-The behaviour of the C<coordinates()> method when called in scalar
-context has not yet been defined.
 
 There are currently no methods named C<x()>, C<y()>, or C<z()>.
 This is to avoid confusion with Perl's C<y///> operator.
