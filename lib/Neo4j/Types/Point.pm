@@ -59,14 +59,6 @@ two or three dimensions and a SRID that may define their semantics.
 The SRID and thereby the coordinate semantics are defined by Neo4j.
 See L</"srid"> for details.
 
-This module makes no assumptions about its internal data structure.
-While default implementations for all methods are provided,
-inheritors are free to override these according to their needs.
-The default implementations assume the data is stored in an array
-reference whose order of elements matches that of
-L<Bolt PackStream|https://7687.org/packstream/packstream-specification-1.html#point2d---structure>
-for Point2D/Point3D.
-
 Supported in Neo4j S<version 3.4> and above.
 
 =head1 METHODS

@@ -1,0 +1,286 @@
+# PODNAME: Neo4j::Types::ImplementorNotes
+# ABSTRACT: Guidance for driver implementors
+
+=encoding UTF-8
+
+=head1 OVERVIEW
+
+When writing a Neo4j driver in Perl, you'll need to consider how to
+match Cypher types to Perl types and vice versa. This document tries
+to give implementation advice for each Cypher type.
+
+Some Cypher types are fairly generic and seemingly straightforward to
+map to Perl. However, there are some pitfalls, which are discussed
+below. Other types (such as Neo4j nodes) are more specialised,
+requiring a custom Perl data structure. The L<Neo4j::Types>
+distribution defines roles (interfaces with method behaviours)
+that may be performed by such data structures.
+
+B<You probably don't need to read this document,> unless you happen
+to be writing a Neo4j driver or other software that performs the
+L<Neo4j::Types> roles or inherits from these modules.
+
+=head1 STRUCTURAL TYPES
+
+Neo4j structural types are nodes, relationships, paths.
+They may be represented as:
+
+=over
+
+=item * L<Neo4j::Types::Node>
+
+=item * L<Neo4j::Types::Relationship>
+
+=item * L<Neo4j::Types::Path>
+
+=back
+
+These modules should be treated as roles. A role defines an
+object-oriented interface with specific behaviour for others
+to implement.
+
+The methods defined by this distribution are loosely modelled
+on the Neo4j Driver API. They don't match that API precisely
+because the official Neo4j drivers don't always use the exact
+same method names for their functionality, and the
+L<Neo4j Driver API Spec|https://neo4j.com/docs/bolt/current/driver-api/>
+currently doesn't discuss these methods.
+
+=head2 Node
+
+See L<Neo4j::Types::Node> for the methods defined by that role.
+
+This module makes no assumptions about its internal data
+structure. While default implementations for all methods
+are provided, inheritors are free to override these
+according to their needs. The default implementations
+assume the data is stored in the format shown below, as
+defined for L<Neo4j::Bolt::Node>.
+
+ $node = bless {
+   id     => $node_id,
+   labels => [$label1, $label2, ...],
+   properties => {prop1 => $value1, prop2 => $value2, ...}
+ }, 'Neo4j::Types::Node';
+
+Indirect use:
+
+ $node = bless $data, 'Local::Node';
+ 
+ package Local::Node;
+ use parent 'Neo4j::Types::Node';
+ # override methods as required
+
+=head2 Relationship
+
+See L<Neo4j::Types::Relationship> for the methods defined
+by that role.
+
+This module makes no assumptions about its internal data
+structure. While default implementations for all methods
+are provided, inheritors are free to override these
+according to their needs. The default implementations
+assume the data is stored in the format shown below, as
+defined for L<Neo4j::Bolt::Relationship>.
+
+ $relationship = bless {
+   id    => $relationship_id,
+   type  => $relationship_type,
+   start => $start_node_id,
+   end   => $end_node_id,
+   properties => {prop1 => $value1, prop2 => $value2, ...}
+ }, 'Neo4j::Types::Relationship';
+
+Indirect use:
+
+ $relationship = bless $data, 'Local::Relationship';
+ 
+ package Local::Relationship;
+ use parent 'Neo4j::Types::Relationship';
+ # override methods as required
+
+=head2 Path
+
+See L<Neo4j::Types::Path> for the methods defined by that role.
+
+This module makes no assumptions about its internal data
+structure. While default implementations for all methods
+are provided, inheritors are free to override these
+according to their needs. The default implementations
+assume the data is stored in the format shown below, as
+defined for L<Neo4j::Bolt::Path>.
+
+ $path = bless [
+   $node1,
+   $relationship1,
+   $node2,
+   $relationship2,
+   $node3,
+   ...
+ ], 'Neo4j::Types::Path';
+
+Indirect use:
+
+ $path = bless $data, 'Local::Path';
+ 
+ package Local::Path;
+ use parent 'Neo4j::Types::Path';
+ # override methods as required
+
+=head1 SCALAR TYPES
+
+Values of the following types can in principle be stored as a Perl
+scalar. However, Perl scalars by themselves cannot cleanly separate
+between all of these types. This can make it difficult to convert
+scalars back to Cypher types (for example for the use in Cypher
+statements parameters).
+
+=head2 Number (Integer or Float)
+
+Both Neo4j and Perl internally distinguish between integer numbers
+and floating-point numbers. Neo4j stores these as Java C<long> and
+C<double>, which both are signed 64-bit types. In Perl, their
+precision is whatever was used by the C compiler to build your
+Perl executable (usually 64-bit types as well on modern systems).
+
+Both Neo4j and Perl will automatically convert integers to floats
+to calculate an expression if necessary (like for C<1 + 0.5>), so
+the distinction between integers and floats often doesn't matter.
+However, integers and floats are both just scalars in Perl, which
+may make it difficult to create a float with an integer value in
+Neo4j (for example, trying to store C<$a = 2.0 + 1> as a property
+may result in the integer C<3> being stored in Neo4j).
+
+L<perlnumber> explains further details on type conversions in Perl.
+In particular, Perl will also try to automatically convert between
+strings and numbers, but Neo4j will not. This may have unintended
+consequences, as the following example demonstrates.
+
+ $id = get_id_from_node($node);  # returns an integer
+ say "The ID is $id.";           # silently turns $id into a string
+ $node = get_node_by_id($id);    # fails: ID must be integer
+
+This latter situation may be solved by using unary coercions.
+
+ $string = "$number";
+ $number = 0 + $string;
+
+In the future, the L<Neo4j::Types> distribution might be extended
+to offer ways to better handle the issues described in this section.
+
+=head2 String
+
+Perl scalars are a good match for Neo4j strings. However, in some
+situations, scalar strings may easily be confused with numbers or
+byte arrays in Perl.
+
+Neo4j strings are always encoded in UTF-8. Perl supports this as
+well, though string scalars that only contain ASCII are usually
+not treated as UTF-8 internally for efficiency reasons.
+
+=head2 Boolean
+
+Perl does not have a native boolean data type. It's trivial to
+map from Cypher booleans to truthy or non-truthy Perl scalars,
+but the reverse is difficult without additional information.
+
+There are a multitude of modules on CPAN that try to solve
+this problem, including L<boolean>, L<Types::Bool>, and
+L<Types::Serialiser>. Among them, L<JSON::PP::Boolean> has
+the advantage that it has long been in Perl CORE.
+
+=head2 Null
+
+The Cypher C<null> value can be neatly implemented as Perl C<undef>.
+
+=head2 Byte array
+
+Byte arrays are not actually Cypher types, but still have some
+limited support as pass-through values in Neo4j. In Perl, byte
+arrays are most efficiently represented as string scalars with
+their C<UTF8> flag turned off (though there may be some gotchas;
+see L<perlguts/"Working with SVs"> for details).
+
+However, it usually isn't possible to determine whether such a
+scalar actually is supposed to be a byte array or a string; see
+L<perlguts/"How can I recognise a UTF-8 string?">. In the future,
+the L<Neo4j::Types> distribution might be extended to offer ways
+to handle this.
+
+=head1 SPATIAL TYPES
+
+The only spatial type currently offered by Neo4j is the point.
+It may be represented as L<Neo4j::Types::Point>.
+
+It might be possible to (crudely) represent other spatial types by
+using a list of points plus external metadata, or in a Neo4j graph
+by treating the graph itself as a spatial representation.
+
+The coordinate reference systems of spatial points in Neo4j are
+currently severely constrained. There is no way to tag points with
+the CRS they actually use, and for geographic coordinates (lat/lon),
+only a single, subtly non-standard CRS is even supported. For uses
+that don't require the spatial functions that Neo4j offers, it might
+be best to eschew the point type completely and store coordinate
+pairs as a simple list in the Neo4j database instead.
+
+=head2 Point
+
+See L<Neo4j::Types::Point> for the methods defined by that role.
+
+This module makes no assumptions about its internal data
+structure. While default implementations for all methods
+are provided, inheritors are free to override these
+according to their needs. The default implementations
+assume the data is stored in the format shown below, as
+defined for L<Bolt PackStream v2 Point2D/Point3D|https://neo4j.com/docs/bolt/current/bolt/structure-semantics/#structure-point2d>.
+
+ $point = bless [
+   $srid, $x, $y, $z
+ ], 'Neo4j::Types::Point';
+
+Indirect use:
+
+ $point = bless $data, 'Local::Point';
+ 
+ package Local::Point;
+ use parent 'Neo4j::Types::Point';
+ # override methods as required
+
+=head1 TEMPORAL TYPES
+
+Cypher temporal types include: Date, Time, LocalTime, DateTime,
+LocalDateTime, and Duration.
+
+This distribution currently does not handle dates, times, or
+durations. It is suggested to use the existing packages L<DateTime>
+and L<DateTime::Duration>.
+
+=head1 LIST AND MAP
+
+Constructed types, formerly known as composite types, are:
+
+=over
+
+=item * List
+
+=item * Map (also known as Dictionary)
+
+=back
+
+In Perl, these types match simple unblessed array and hash
+references very nicely.
+
+=head1 SEE ALSO
+
+=over
+
+=item * L<Neo4j::Bolt/"Return Types">
+
+=item * L<Neo4j::Driver::Record/"get">
+
+=item * L<REST::Neo4p::Entity>
+
+=item * L<"Values and types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/>
+
+=back

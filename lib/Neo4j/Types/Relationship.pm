@@ -74,13 +74,6 @@ server. Its description contains the relationship's properties as
 well as certain meta data, all accessible by methods that
 this class provides.
 
-This module makes no assumptions about its internal data
-structure. While default implementations for all methods
-are provided, inheritors are free to override these
-according to their needs. The default implementations
-assume the data is stored in the format defined for
-L<Neo4j::Bolt::Relationship>.
-
 L<Neo4j::Types::Relationship> objects are typically not in a
 one-to-one relation with relationships in a Neo4j graph. If the
 same Neo4j relationship is fetched multiple times, then multiple

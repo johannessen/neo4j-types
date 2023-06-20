@@ -53,13 +53,6 @@ node which is both the start and the end of the path.
 L<Neo4j::Types::Path> objects may be created by executing
 a Cypher statement against a Neo4j database server.
 
-This module makes no assumptions about its internal data
-structure. While default implementations for all methods
-are provided, inheritors are free to override these
-according to their needs. The default implementations
-assume the data is stored in the format defined for
-L<Neo4j::Bolt::Path>.
-
 =head1 METHODS
 
 L<Neo4j::Types::Path> implements the following methods.
