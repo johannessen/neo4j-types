@@ -5,18 +5,18 @@ The [Neo4j::Types][] packages form a common Neo4j type system for Perl.
 Implementations such as [Neo4j::Bolt][] and [Neo4j::Driver][] can
 (if they so choose) use these packages either directly:
 
-````perl
+```perl
 $node = bless $data, 'Neo4j::Types::Node';
-````
+```
 
 Or indirectly:
 
-````perl
+```perl
 $node = bless $data, 'Local::Node';
 
 package Local::Node;
 use parent 'Neo4j::Types::Node';
-````
+```
 
 Packages in this distribution primarily define methods. They do not currently
 make any particular assumptions about their internal data structures.
@@ -34,8 +34,7 @@ Feedback and pull requests are welcome. However, for proposed changes to this
 distribution, interoperability concerns for its existing users (particularly
 users of [Neo4j::Bolt][]) must be considered.
 
-[Neo4j Driver API]: https://neo4j.com/docs/driver-manual/current/
-[Cypher types]: https://neo4j.com/docs/cypher-manual/current/syntax/values/
+[Cypher types]: https://neo4j.com/docs/cypher-manual/5/values-and-types/
 
 
 Installation
@@ -54,6 +53,10 @@ To install a development version from this repository, run the following steps:
 1. `git clone https://github.com/johannessen/neo4j-types && cd neo4j-types`
 1. `dzil build` (requires [Dist::Zilla][])
 1. `cpanm <archive>.tar.gz`
+
+This is a “Pure Perl” module, so you generally do not need
+Dist::Zilla to contribute patches. You can simply clone the
+repository and run the test suite using `prove` instead.
 
 [Neo4j::Types]: https://metacpan.org/release/Neo4j-Types
 [Neo4j::Bolt]: https://metacpan.org/release/Neo4j-Bolt

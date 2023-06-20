@@ -85,12 +85,14 @@ method has not yet been defined.
 
 =over
 
+=item * L<Neo4j::Types::ImplementorNotes/"Node">
+
 =item * L<Neo4j::Bolt::Node>
 
 =item * L<Neo4j::Driver::Type::Node>
 
 =item * L<REST::Neo4p::Node>
 
-=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types>
+=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#structural-types>
 
 =back

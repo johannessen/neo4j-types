@@ -75,7 +75,7 @@ Retrieve an identifier for this point's spatial reference system.
 This SRID has no meaning outside the context of Neo4j; in particular,
 it is B<not an EPSG code.>
 
-=cut
+=begin comment
 
 Neo4j actually does falsely claim EPSG or spatialreference.org conformance in at least one place. However:
 
@@ -87,7 +87,7 @@ Neo4j actually does falsely claim EPSG or spatialreference.org conformance in at
 - EPSG:9157 is Angola RSAO13 UTM 33, NEO4J:9157 is generic Euclidian 3D space
 - SR-ORG:7203/SR-ORG:9157 define units and axis orientation, NEO4J:7203/NEO4J:9157 do not
 
-=pod
+=end comment
 
 To date, Neo4j has defined four SRIDs: 4326, 4979, 7203, and 9157.
 Every point retrieved from Neo4j is referred to a coordinate system
@@ -185,8 +185,10 @@ This is to avoid confusion with Perl's C<y///> operator.
 
 =over
 
+=item * L<Neo4j::Types::ImplementorNotes/"Point">
+
 =item * L<Neo4j::Driver::Type::Point>
 
-=item * L<"Spatial values" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/current/syntax/spatial/>
+=item * L<"Spatial values" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/spatial/>
 
 =back

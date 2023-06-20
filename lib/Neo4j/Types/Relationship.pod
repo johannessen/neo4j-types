@@ -99,12 +99,14 @@ method has not yet been defined.
 
 =item * L<Neo4j::Types::B<Node>>
 
+=item * L<Neo4j::Types::ImplementorNotes/"Relationship">
+
 =item * L<Neo4j::Bolt::Relationship>
 
 =item * L<Neo4j::Driver::Type::Relationship>
 
 =item * L<REST::Neo4p::Relationship>
 
-=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/current/syntax/values/#structural-types>
+=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#structural-types>
 
 =back

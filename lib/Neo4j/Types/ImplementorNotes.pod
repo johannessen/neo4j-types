@@ -71,6 +71,10 @@ Indirect use:
  use parent 'Neo4j::Types::Node';
  # override methods as required
 
+It is recommended that the C<id()> method returns a number for
+which L<builtin/"created_as_number"> would be truthy (S<e. g.>
+C<0 + $id>). This can make roundtrips easier.
+
 =head2 Relationship
 
 See L<Neo4j::Types::Relationship> for the methods defined
@@ -98,6 +102,11 @@ Indirect use:
  package Local::Relationship;
  use parent 'Neo4j::Types::Relationship';
  # override methods as required
+
+It is recommended that the methods C<id()>, C<start_id()>,
+and C<end_id()> return a number for which
+L<builtin/"created_as_number"> would be truthy
+(S<e. g.> C<0 + $id>). This can make roundtrips easier.
 
 =head2 Path
 
@@ -168,6 +177,11 @@ This latter situation may be solved by using unary coercions.
 In the future, the L<Neo4j::Types> distribution might be extended
 to offer ways to better handle the issues described in this section.
 
+Note that while Neo4j easily handles the special floating point
+values -0.0, NaN and ±Infinity, Perl support for these values has
+various issues (that may vary by platform). See L<Data::Float> for
+details.
+
 =head2 String
 
 Perl scalars are a good match for Neo4j strings. However, in some
@@ -180,14 +194,19 @@ not treated as UTF-8 internally for efficiency reasons.
 
 =head2 Boolean
 
-Perl does not have a native boolean data type. It's trivial to
-map from Cypher booleans to truthy or non-truthy Perl scalars,
-but the reverse is difficult without additional information.
-
-There are a multitude of modules on CPAN that try to solve
+Perl only gained useful native boolean values
+L<in version 5.35.4|perl5354delta/"Stable boolean tracking">.
+On earlier versions, various CPAN modules attempt to solve
 this problem, including L<boolean>, L<Types::Bool>, and
 L<Types::Serialiser>. Among them, L<JSON::PP::Boolean> has
 the advantage that it has long been in Perl CORE.
+
+Some of the Perl JSON modules are currently (2023) in the
+process of adding support for Perl native booleans. It may
+be useful to wait until those L<builtin> functions that
+provide access to Perl native booleans have left
+L<experimental status|perlexperiment/"The builtin namespace">
+and then follow whichever approach those other modules chose.
 
 =head2 Null
 
@@ -246,6 +265,10 @@ Indirect use:
  package Local::Point;
  use parent 'Neo4j::Types::Point';
  # override methods as required
+
+It is recommended that all methods return a number for which
+L<builtin/"created_as_number"> would be truthy
+(S<e. g.> C<0 + $srid>). This can make roundtrips easier.
 
 =head1 TEMPORAL TYPES
 
