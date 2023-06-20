@@ -50,9 +50,14 @@ be installed explicitly:
 
 To install a development version from this repository, run the following steps:
 
-1. `git clone https://github.com/johannessen/neo4j-types && cd neo4j-types`
-1. `dzil build` (requires [Dist::Zilla][])
-1. `cpanm <archive>.tar.gz`
+```sh
+git clone https://github.com/johannessen/neo4j-types && cd neo4j-types
+cpanm Dist::Zilla::PluginBundle::Author::AJNN
+dzil install
+
+# To upload a new version to CPAN (requires indexing permissions):
+dzil release
+```
 
 This is a “Pure Perl” module, so you generally do not need
 Dist::Zilla to contribute patches. You can simply clone the
@@ -61,4 +66,3 @@ repository and run the test suite using `prove` instead.
 [Neo4j::Types]: https://metacpan.org/release/Neo4j-Types
 [Neo4j::Bolt]: https://metacpan.org/release/Neo4j-Bolt
 [Neo4j::Driver]: https://metacpan.org/release/Neo4j-Driver
-[Dist::Zilla]: https://metacpan.org/release/Dist-Zilla
