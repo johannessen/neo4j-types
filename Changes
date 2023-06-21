@@ -1,11 +1,12 @@
 Revision history for Neo4j::Types
 
-1.04  UNRELEASED
+1.05  UNRELEASED
 
  - Define scalar context for list methods to yield number of elements
  - Define properties() to behave the same in list context as in scalar context.
  - Define result of reading a non-existent property to be undef.
  - Clarify that labels() and properties() must not return undef.
+ - Recommend that users don't inherit type implementations from these roles.
 
 1.00  2021-01-18
 

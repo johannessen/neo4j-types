@@ -39,6 +39,12 @@ These modules should be treated as roles. A role defines an
 object-oriented interface with specific behaviour for others
 to implement.
 
+While these modules currently offer default implementations of
+all methods, it is strongly recommended for implementors to
+write their own method implementations for their own data
+structures in order to maintain encapsulation and to reduce
+the risk of action at a distance.
+
 The methods defined by this distribution are loosely modelled
 on the Neo4j Driver API. They don't match that API precisely
 because the official Neo4j drivers don't always use the exact
@@ -50,26 +56,25 @@ currently doesn't discuss these methods.
 
 See L<Neo4j::Types::Node> for the methods defined by that role.
 
-This module makes no assumptions about its internal data
-structure. While default implementations for all methods
-are provided, inheritors are free to override these
-according to their needs. The default implementations
-assume the data is stored in the format shown below, as
-defined for L<Neo4j::Bolt::Node>.
+The recommended way to have your own module perform the role
+is to write implementations for all the methods, then declare
+L<Neo4j::Types::Node> as a parent type.
 
- $node = bless {
-   id     => $node_id,
-   labels => [$label1, $label2, ...],
-   properties => {prop1 => $value1, prop2 => $value2, ...}
- }, 'Neo4j::Types::Node';
-
-Indirect use:
-
- $node = bless $data, 'Local::Node';
- 
  package Local::Node;
  use parent 'Neo4j::Types::Node';
- # override methods as required
+ 
+ sub get        ($self, $property_key) {...}
+ sub properties ($self) {...}
+ 
+ sub labels     ($self) {...}
+ 
+ sub id         ($self) {...}
+
+You are free in your choice of the internal data structure.
+While L<Neo4j::Types::Node> currently provides default
+implementations of all methods, these only exist because some
+versions of L<Neo4j::Bolt::Node> might expect them.
+They may be removed in future and should not be relied upon.
 
 It is recommended that the C<id()> method returns a number for
 which L<builtin/"created_as_number"> would be truthy (S<e. g.>
@@ -95,28 +100,27 @@ the idiom C<< exists $node->properties->{$key} >>.
 See L<Neo4j::Types::Relationship> for the methods defined
 by that role.
 
-This module makes no assumptions about its internal data
-structure. While default implementations for all methods
-are provided, inheritors are free to override these
-according to their needs. The default implementations
-assume the data is stored in the format shown below, as
-defined for L<Neo4j::Bolt::Relationship>.
+The recommended way to have your own module perform the role
+is to write implementations for all the methods, then declare
+L<Neo4j::Types::Relationship> as a parent type.
 
- $relationship = bless {
-   id    => $relationship_id,
-   type  => $relationship_type,
-   start => $start_node_id,
-   end   => $end_node_id,
-   properties => {prop1 => $value1, prop2 => $value2, ...}
- }, 'Neo4j::Types::Relationship';
-
-Indirect use:
-
- $relationship = bless $data, 'Local::Relationship';
- 
  package Local::Relationship;
  use parent 'Neo4j::Types::Relationship';
- # override methods as required
+ 
+ sub get        ($self, $property_key) {...}
+ sub properties ($self) {...}
+ 
+ sub type       ($self) {...}
+ 
+ sub id         ($self) {...}
+ sub start_id   ($self) {...}
+ sub end_id     ($self) {...}
+
+You are free in your choice of the internal data structure.
+While L<Neo4j::Types::Relationship> currently provides default
+implementations of all methods, these only exist because some
+versions of L<Neo4j::Bolt::Relationship> might expect them.
+They may be removed in future and should not be relied upon.
 
 It is recommended that the methods C<id()>, C<start_id()>,
 and C<end_id()> return a number for which
@@ -131,29 +135,22 @@ on L<nodes|/"Node"> apply.
 
 See L<Neo4j::Types::Path> for the methods defined by that role.
 
-This module makes no assumptions about its internal data
-structure. While default implementations for all methods
-are provided, inheritors are free to override these
-according to their needs. The default implementations
-assume the data is stored in the format shown below, as
-defined for L<Neo4j::Bolt::Path>.
+The recommended way to have your own module perform the role
+is to write implementations for all the methods, then declare
+L<Neo4j::Types::Path> as a parent type.
 
- $path = bless [
-   $node1,
-   $relationship1,
-   $node2,
-   $relationship2,
-   $node3,
-   ...
- ], 'Neo4j::Types::Path';
-
-Indirect use:
-
- $path = bless $data, 'Local::Path';
- 
  package Local::Path;
  use parent 'Neo4j::Types::Path';
- # override methods as required
+ 
+ sub elements      ($self) {...}
+ sub nodes         ($self) {...}
+ sub relationships ($self) {...}
+
+You are free in your choice of the internal data structure.
+While L<Neo4j::Types::Path> currently provides default
+implementations of all methods, these only exist because some
+versions of L<Neo4j::Bolt::Path> might expect them.
+They may be removed in future and should not be relied upon.
 
 =head1 SCALAR TYPES
 
@@ -266,24 +263,32 @@ pairs as a simple list in the Neo4j database instead.
 
 See L<Neo4j::Types::Point> for the methods defined by that role.
 
-This module makes no assumptions about its internal data
-structure. While default implementations for all methods
-are provided, inheritors are free to override these
-according to their needs. The default implementations
-assume the data is stored in the format shown below, as
-defined for L<Bolt PackStream v2 Point2D/Point3D|https://neo4j.com/docs/bolt/current/bolt/structure-semantics/#structure-point2d>.
+The recommended way to have your own module perform the role
+is to write implementations for all the methods, then declare
+L<Neo4j::Types::Point> as a parent type.
 
- $point = bless [
-   $srid, $x, $y, $z
- ], 'Neo4j::Types::Point';
-
-Indirect use:
-
- $point = bless $data, 'Local::Point';
- 
  package Local::Point;
  use parent 'Neo4j::Types::Point';
- # override methods as required
+ 
+ sub new         ($class, $neo4j_srid, @coordinates) {...}
+ sub srid        ($self) {...}
+ sub coordinates ($self) {...}
+ 
+ sub X           ($self) {...}  # uppercase X
+ sub longitude   ($self) {...}
+ 
+ sub Y           ($self) {...}  # uppercase Y
+ sub latitude    ($self) {...}
+ 
+ sub Z           ($self) {...}  # uppercase Z
+ sub height      ($self) {...}
+
+You are free in the choice of your own module's internal
+data structure. If you instead choose to use the generic
+implementation provided by L<Neo4j::Types::Point> itself, you
+should treat it as entirely opaque and should not access the
+data structure in any other way than through the methods
+specified in L<Neo4j::Types::Point>.
 
 It is recommended that all methods return a number for which
 L<builtin/"created_as_number"> would be truthy
