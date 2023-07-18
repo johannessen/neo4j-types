@@ -37,7 +37,7 @@ L<Neo4j::Types::Node> implements the following methods.
  $value = $node->get('property_key');
 
 Retrieve the value of this node's property with the given
-key. If no such key exists, return an undefined value.
+key. If no such key exists, return C<undef>.
 
 =head2 id
 

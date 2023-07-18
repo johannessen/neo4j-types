@@ -8,7 +8,7 @@ use Test::Exception;
 use Test::Warnings;
 use Neo4j::Types::Node;
 
-plan tests => 12 + 5 + 6 + 1;
+plan tests => 12 + 5 + 7 + 1;
 
 
 my ($n, @l, $p);
@@ -51,10 +51,11 @@ ok ! defined($n->id), 'id gigo';
 @l = $n->labels;
 is scalar(@l), 0, 'no labels';
 lives_and { is scalar($n->labels), 0 } 'scalar context no labels';
-ok ! defined($n->get('whatever')), 'prop undef';
 $p = $n->properties;
 is ref($p), 'HASH', 'empty props ref';
 is scalar(keys %$p), 0, 'empty props empty';
+is_deeply [$n->get('whatever')], [undef], 'prop undef';
+ok ! exists $n->properties->{whatever}, 'prop remains non-existent';
 
 
 done_testing;

@@ -7,7 +7,7 @@ use Test::More 0.88;
 use Test::Warnings;
 use Neo4j::Types::Relationship;
 
-plan tests => 11 + 5 + 7 + 1;
+plan tests => 11 + 5 + 8 + 1;
 
 
 my ($r, $p);
@@ -50,10 +50,11 @@ ok ! defined($r->id), 'id gigo';
 ok ! defined($r->type), 'no type';
 ok ! defined($r->start_id), 'no start id';
 ok ! defined($r->end_id), 'no end id';
-ok ! defined($r->get('whatever')), 'prop undef';
 $p = $r->properties;
 is ref($p), 'HASH', 'empty props ref';
 is scalar(keys %$p), 0, 'empty props empty';
+is_deeply [$r->get('whatever')], [undef], 'prop undef';
+ok ! exists $r->properties->{whatever}, 'prop remains non-existent';
 
 
 done_testing;

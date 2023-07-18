@@ -40,7 +40,7 @@ L<Neo4j::Types::Relationship> implements the following methods.
  $value = $relationship->get('property_key');
 
 Retrieve the value of this relationship's property with the given
-key. If no such key exists, return an undefined value.
+key. If no such key exists, return C<undef>.
 
 =head2 id
 

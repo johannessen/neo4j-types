@@ -75,6 +75,13 @@ It is recommended that the C<id()> method returns a number for
 which L<builtin/"created_as_number"> would be truthy (S<e. g.>
 C<0 + $id>). This can make roundtrips easier.
 
+Trying to access a property that doesn't exist must yield the
+scalar value C<undef>, both for the C<get()> method as well as
+the hash reference returned by C<properties()>. Expect users who
+wish to determine whether a particular property key does in fact
+not exist or whether it simply has the value C<undef> to use
+the idiom C<< exists $node->properties->{$key} >>.
+
 =head2 Relationship
 
 See L<Neo4j::Types::Relationship> for the methods defined
@@ -107,6 +114,10 @@ It is recommended that the methods C<id()>, C<start_id()>,
 and C<end_id()> return a number for which
 L<builtin/"created_as_number"> would be truthy
 (S<e. g.> C<0 + $id>). This can make roundtrips easier.
+
+For the C<get()> and C<properties()> methods, the same
+considerations as above for C<get()> and C<properties()>
+on L<nodes|/"Node"> apply.
 
 =head2 Path
 

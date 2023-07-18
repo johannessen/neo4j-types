@@ -9,7 +9,6 @@ package Neo4j::Types::Node;
 sub get {
 	my ($self, $property) = @_;
 	
-	return unless defined $self->{properties};
 	return $self->{properties}->{$property};
 }
 
