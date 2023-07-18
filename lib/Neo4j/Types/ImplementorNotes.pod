@@ -75,6 +75,14 @@ It is recommended that the C<id()> method returns a number for
 which L<builtin/"created_as_number"> would be truthy (S<e. g.>
 C<0 + $id>). This can make roundtrips easier.
 
+The C<labels()> and C<properties()> methods must not return
+C<undef>. If there are no labels or properties, an empty list
+or an empty hash reference must be returned.
+(The default implementations of methods in L<Neo4j::Types::Node>
+currently also handle C<undef> in the data structure for bug
+compatibility with L<Neo4j::Bolt::CTypeHandlers>, but this may
+change in future.)
+
 Trying to access a property that doesn't exist must yield the
 scalar value C<undef>, both for the C<get()> method as well as
 the hash reference returned by C<properties()>. Expect users who
