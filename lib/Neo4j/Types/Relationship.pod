@@ -86,9 +86,6 @@ Return the type of this relationship.
 
 =head1 BUGS
 
-The behaviour of the C<properties()> method when called
-in list context has not yet been defined.
-
 The effect of making changes to the contents of the hash
 to which a reference is returned from the C<properties()>
 method has not yet been defined.

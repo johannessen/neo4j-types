@@ -1,8 +1,9 @@
 Revision history for Neo4j::Types
 
-1.01  UNRELEASED
+1.02  UNRELEASED
 
  - Define scalar context for list methods to yield number of elements
+ - Define properties() to behave the same in list context as in scalar context.
 
 1.00  2021-01-18
 

@@ -8,7 +8,7 @@ use Test::Exception;
 use Test::Warnings;
 use Neo4j::Types::Node;
 
-plan tests => 12 + 4 + 6 + 1;
+plan tests => 12 + 5 + 6 + 1;
 
 
 my ($n, @l, $p);
@@ -44,6 +44,7 @@ is ref($n->get('0')), 'ARRAY', 'get 0 ref';
 is scalar(@{$n->get('0')}), 0, 'get 0 empty';
 $p = $n->properties;
 is_deeply $p, {0=>[]}, 'props deeply';
+is_deeply [$n->properties], [{0=>[]}], 'props list context';
 
 $n = new_node { };
 ok ! defined($n->id), 'id gigo';

@@ -7,7 +7,7 @@ use Test::More 0.88;
 use Test::Warnings;
 use Neo4j::Types::Relationship;
 
-plan tests => 11 + 4 + 7 + 1;
+plan tests => 11 + 5 + 7 + 1;
 
 
 my ($r, $p);
@@ -43,6 +43,7 @@ is ref($r->get('0')), 'ARRAY', 'get 0 ref';
 is scalar(@{$r->get('0')}), 0, 'get 0 empty';
 $p = $r->properties;
 is_deeply $p, {0=>[]}, 'props deeply';
+is_deeply [$r->properties], [{0=>[]}], 'props list context';
 
 $r = new_rel { };
 ok ! defined($r->id), 'id gigo';
