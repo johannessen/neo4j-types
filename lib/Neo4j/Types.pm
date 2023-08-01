@@ -5,6 +5,8 @@ package Neo4j::Types;
 # ABSTRACT: Common Neo4j type system
 
 
+use warnings::register;
+
 use Neo4j::Types::Node;
 use Neo4j::Types::Path;
 use Neo4j::Types::Point;

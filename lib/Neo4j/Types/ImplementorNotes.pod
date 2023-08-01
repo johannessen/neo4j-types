@@ -69,16 +69,28 @@ L<Neo4j::Types::Node> as a parent type.
  sub labels     ($self) {...}
  
  sub id         ($self) {...}
+ sub element_id ($self) {...}
 
 You are free in your choice of the internal data structure.
 While L<Neo4j::Types::Node> currently provides default
-implementations of all methods, these only exist because some
+implementations of most methods, these only exist because some
 versions of L<Neo4j::Bolt::Node> might expect them.
 They may be removed in future and should not be relied upon.
 
 It is recommended that the C<id()> method returns a number for
 which L<builtin/"created_as_number"> would be truthy (S<e. g.>
 C<0 + $id>). This can make roundtrips easier.
+
+When the element ID is unavailable, C<element_id()> must by
+default issue a warning and must otherwise behave like an alias
+for C<id()>. When the S<element ID> I<is> available, C<id()>
+may optionally issue a deprecation warning. The behaviour of
+C<id()> when the legacy ID is unavailable is undefined.
+
+For implementations geared only towards S<Neo4j 4> and older,
+C<element_id()> is currently an optional operation.
+While C<id()> is currently mandatory, it may similarly become
+an optional operation for newer Neo4j versions in future.
 
 The C<labels()> and C<properties()> methods must not return
 C<undef>. If there are no labels or properties, an empty list
@@ -115,10 +127,14 @@ L<Neo4j::Types::Relationship> as a parent type.
  sub id         ($self) {...}
  sub start_id   ($self) {...}
  sub end_id     ($self) {...}
+ 
+ sub element_id       ($self) {...}
+ sub start_element_id ($self) {...}
+ sub end_element_id   ($self) {...}
 
 You are free in your choice of the internal data structure.
 While L<Neo4j::Types::Relationship> currently provides default
-implementations of all methods, these only exist because some
+implementations of most methods, these only exist because some
 versions of L<Neo4j::Bolt::Relationship> might expect them.
 They may be removed in future and should not be relied upon.
 
@@ -126,6 +142,10 @@ It is recommended that the methods C<id()>, C<start_id()>,
 and C<end_id()> return a number for which
 L<builtin/"created_as_number"> would be truthy
 (S<e. g.> C<0 + $id>). This can make roundtrips easier.
+
+For C<element_id()>, C<id()> and related methods, the same
+considerations as above for C<element_id()> and C<id()>
+on L<nodes|/"Node"> apply.
 
 For the C<get()> and C<properties()> methods, the same
 considerations as above for C<get()> and C<properties()>

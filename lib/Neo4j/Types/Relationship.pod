@@ -5,9 +5,15 @@
 
 =head1 SYNOPSIS
 
- $rel_id   = $relationship->id;
  $rel_type = $relationship->type;
  
+ # Neo4j 5 and newer
+ $rel_id        = $relationship->element_id;
+ $start_node_id = $relationship->start_element_id;
+ $end_node_id   = $relationship->end_element_id;
+ 
+ # Neo4j 4 and older
+ $rel_id        = $relationship->id;
  $start_node_id = $relationship->start_id;
  $end_node_id   = $relationship->end_id;
  
@@ -31,9 +37,32 @@ Refer to the documentation of the Perl module you use to
 fetch relationships from the Neo4j database for information about
 how that particular module handles this aspect.
 
+Neo4j relationship IDs are not designed to be persistent.
+As such, if you want a public identity to use for your
+relationships, attaching an explicit "id" property is a
+better choice than using the Neo4j relationship ID or
+S<element ID>.
+
 =head1 METHODS
 
 L<Neo4j::Types::Relationship> implements the following methods.
+
+=head2 element_id
+
+ $string = $relationship->element_id;
+
+Return an ID string for this relationship that is unique within
+a particular context, for example the current transaction.
+
+The element ID string was introduced with Neo4j 5. When it is
+unavailable, for example because this module is used with Neo4j
+server S<version 4> or earlier, this method will issue a
+warning in the C<Neo4j::Types> category and return the legacy
+S<numeric ID> instead; see L<C<id()>|/"id">.
+
+=for comment
+Note that a S<numeric ID> cannot successfully be used
+with C<elementId()> in Cypher expressions.
 
 =head2 get
 
@@ -44,18 +73,17 @@ key. If no such key exists, return C<undef>.
 
 =head2 id
 
- $id = $relationship->id;
+ $number = $relationship->id;
 
-Return an ID for this relationship that is unique within
-a particular context, for example the current
-L<driver session|Neo4j::Driver::Session> or
-L<Bolt connection|Neo4j::Bolt::Cxn>.
+Return a legacy numeric ID for this relationship that is
+unique within a particular context, for example the
+current transaction.
 
-Neo4j relationship IDs are not designed to be persistent.
-After a relationship is deleted, its ID may be reused by
-another relationship.
+On Neo4j 5 and above, numeric IDs are B<deprecated.>
+They may become unavailable in future.
+Use L<C<element_id()>|/"element_id"> instead.
 
-IDs are always integer numbers.
+Legacy IDs are always integer numbers.
 A relationship with the ID C<0> may exist.
 Nodes and relationships do not share the same ID space.
 
@@ -66,17 +94,33 @@ Nodes and relationships do not share the same ID space.
 
 Return all properties of this relationship as a hash reference.
 
+=head2 start_element_id
+
+ $string = $relationship->start_element_id;
+
+Return an element ID for the node where this relationship starts.
+See L<Neo4j::Types::Node/"element_id">.
+
 =head2 start_id
 
- $id = $relationship->start_id;
+ $number = $relationship->start_id;
 
-Return an ID for the node where this relationship starts.
+Return a numeric ID for the node where this relationship starts.
+See L<Neo4j::Types::Node/"id">.
+
+=head2 end_element_id
+
+ $string = $relationship->end_element_id;
+
+Return an element ID for the node where this relationship ends.
+See L<Neo4j::Types::Node/"element_id">.
 
 =head2 end_id
 
- $id = $relationship->end_id;
+ $number = $relationship->end_id;
 
-Return an ID for the node where this relationship ends.
+Return a numeric ID for the node where this relationship ends.
+See L<Neo4j::Types::Node/"id">.
 
 =head2 type
 

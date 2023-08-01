@@ -5,8 +5,10 @@
 
 =head1 SYNOPSIS
 
- $node_id = $node->id;
  @labels  = $node->labels;
+ 
+ $node_id = $node->element_id;  # Neo4j 5 and newer
+ $node_id = $node->id;          # Neo4j 4 and older
  
  $property1  = $node->get('property1');
  $property2  = $node->get('property2');
@@ -28,9 +30,32 @@ Refer to the documentation of the Perl module you use to
 fetch nodes from the Neo4j database for information about
 how that particular module handles this aspect.
 
+Neo4j node IDs are not designed to be persistent.
+As such, if you want a public identity to use for your
+nodes, attaching an explicit "id" property is a
+better choice than using the Neo4j node ID or
+S<element ID>.
+
 =head1 METHODS
 
 L<Neo4j::Types::Node> implements the following methods.
+
+=head2 element_id
+
+ $string = $node->element_id;
+
+Return an ID string for this node that is unique within
+a particular context, for example the current transaction.
+
+The element ID string was introduced with Neo4j 5. When it is
+unavailable, for example because this module is used with Neo4j
+server S<version 4> or earlier, this method will issue a
+warning in the C<Neo4j::Types> category and return the legacy
+S<numeric ID> instead; see L<C<id()>|/"id">.
+
+=for comment
+Note that a S<numeric ID> cannot successfully be used
+with C<elementId()> in Cypher expressions.
 
 =head2 get
 
@@ -41,18 +66,17 @@ key. If no such key exists, return C<undef>.
 
 =head2 id
 
- $id = $node->id;
+ $number = $node->id;
 
-Return an ID for this node that is unique within
-a particular context, for example the current
-L<driver session|Neo4j::Driver::Session> or
-L<Bolt connection|Neo4j::Bolt::Cxn>.
+Return a legacy numeric ID for this node that is
+unique within a particular context, for example the
+current transaction.
 
-Neo4j node IDs are not designed to be persistent.
-After a node is deleted, its ID may be reused by
-another node.
+On Neo4j 5 and above, numeric IDs are B<deprecated.>
+They may become unavailable in future.
+Use L<C<element_id()>|/"element_id"> instead.
 
-IDs are always integer numbers.
+Legacy IDs are always integer numbers.
 A node with the ID C<0> may exist.
 Nodes and relationships do not share the same ID space.
 
