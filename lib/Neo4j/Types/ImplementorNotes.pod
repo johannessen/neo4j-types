@@ -230,19 +230,56 @@ not treated as UTF-8 internally for efficiency reasons.
 
 =head2 Boolean
 
-Perl only gained useful native boolean values
-L<in version 5.35.4|perl5354delta/"Stable boolean tracking">.
-On earlier versions, various CPAN modules attempt to solve
-this problem, including L<boolean>, L<Types::Bool>, and
-L<Types::Serialiser>. Among them, L<JSON::PP::Boolean> has
-the advantage that it has long been in Perl CORE.
+When reading a boolean from Neo4j, a value representing
+C<true> must evaluate truthy in Perl and a Neo4j value
+representing C<false> must not. Values must be trackable
+as boolean by default to provide round-trip capability.
 
+The following two pairs of Perl values meet these
+requirements and should be used by default:
+
+=over
+
+=item On Perl version 5.36 and newer:
+
+L<C<builtin::true>|builtin/"true"> and
+L<C<builtin::false>|builtin/"false">
+
+=item On older Perl versions:
+
+C<L<JSON::PP>::true> and
+C<L<JSON::PP>::false>
+
+=back
+
+When running on v5.36 or newer, both of these boolean types
+should be accepted as query parameters for writing to Neo4j.
+
+Additional values may optionally be accepted, such as
+C<\1> and C<\0>, L<boolean>, or L<Types::Bool>.
+There is a variety of CPAN modules representing booleans
+because Perl only gained useful native boolean values
+L<in S<version v5.36>|perl5360delta/"Stable boolean tracking">.
+Modules like L<builtin::compat> might help
+with tracking native bools in earlier versions.
+
+=for comment
+(Internally, Perl has long had native boolean values,
+but it was difficult to track their boolean status,
+especially outside XS code. See L<perlapi/"boolSV">,
+L<makamaka/JSON-PP#49|https://github.com/makamaka/JSON-PP/issues/49>.)
+
+Optionally, your implementation may offer users a way
+to choose the boolean values. This document makes no
+recommendation as to the interface for such an option.
+
+=for comment
 Some of the Perl JSON modules are currently (2023) in the
-process of adding support for Perl native booleans. It may
-be useful to wait until those L<builtin> functions that
-provide access to Perl native booleans have left
-L<experimental status|perlexperiment/"The builtin namespace">
-and then follow whichever approach those other modules chose.
+process of adding support for core booleans. It may be
+useful to wait until those implementations are completed
+and then follow whichever approach they chose. See also:
+L<JSON::PP/"boolean_values">,
+L<rurban/Cpanel-JSON-XS#214|https://github.com/rurban/Cpanel-JSON-XS/issues/214>
 
 =head2 Null
 
