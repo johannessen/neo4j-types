@@ -16,6 +16,56 @@ be better optimised for use with the respective driver.
 As long as each of them performs the appropriate role
 from L<Neo4j::Types>, they should all be interchangeable.
 
+=head1 DateTime
+
+Neo4j::Types::Generic::DateTime offers the following methods
+in addition to those defined in L<Neo4j::Types::DateTime>.
+
+=head2 new
+
+ $dt = Neo4j::Types::Generic::DateTime->new({
+   days        => $days,
+   seconds     => $seconds,
+   nanoseconds => $nanoseconds,
+   tz_offset   => $offset_seconds,
+   tz_name     => $iana_tz_name,
+ });
+ $dt = Neo4j::Types::Generic::DateTime->new( $epoch );
+ $dt = Neo4j::Types::Generic::DateTime->new( $epoch, $tz );
+
+Create a new generic temporal instant value.
+For the description of the parameters, see
+L<Neo4j::Types::DateTime/"METHODS">.
+The type of the value will be intrinsically defined by the
+parameters you provide.
+
+Instead of giving the parameters hash ref, you can alternatively
+give the Unix epoch with or without time zone identification.
+This will always create a C<LOCAL DATETIME> or C<ZONED DATETIME>
+value, as appropriate.
+If C<$tz> begins with a letter, it will be treated as an IANA
+Olson time zone database entry name; if it begins with a digit
+or a sign, it will be treated as an offset in seconds.
+
+=head1 Duration
+
+Neo4j::Types::Generic::Duration offers the following methods
+in addition to those defined in L<Neo4j::Types::Duration>.
+
+=head2 new
+
+ $dt = Neo4j::Types::Generic::Duration->new({
+   months      => $months,
+   days        => $days,
+   seconds     => $seconds,
+   nanoseconds => $nanoseconds,
+ });
+
+Create a new generic temporal duration value.
+For the description of the parameters, see
+L<Neo4j::Types::Duration/"METHODS">.
+Missing parameters will be assumed to have the value C<0>.
+
 =head1 Point
 
 Neo4j::Types::Generic::Point offers the following methods
@@ -78,6 +128,10 @@ dimensions, this method returns C<undef>.
 =over
 
 =item * L<Neo4j::Types>
+
+=item * L<Neo4j::Types::DateTime>
+
+=item * L<Neo4j::Types::Duration>
 
 =item * L<Neo4j::Types::Point>
 

@@ -286,12 +286,70 @@ L<builtin/"created_as_number"> would be truthy
 
 =head1 TEMPORAL TYPES
 
-Cypher temporal types include: Date, Time, LocalTime, DateTime,
-LocalDateTime, and Duration.
+Cypher temporal types exist in two varieties:
+temporal instants (DateTime) and durations.
+They may be represented as:
 
-This distribution currently does not handle dates, times, or
-durations. It is suggested to use the existing packages L<DateTime>
-and L<DateTime::Duration>.
+=over
+
+=item * L<Neo4j::Types::DateTime>
+
+=item * L<Neo4j::Types::Duration>
+
+=back
+
+These modules should be treated as roles. A role defines an
+object-oriented interface with specific behaviour for others
+to implement.
+
+=head2 DateTime
+
+See L<Neo4j::Types::DateTime> for the methods defined by that role.
+
+The recommended way to have your own module perform the role
+is to write implementations for at least the following methods,
+then declare L<Neo4j::Types::DateTime> as a parent type.
+
+ package Local::DateTime;
+ use parent 'Neo4j::Types::DateTime';
+ 
+ sub days        ($self) {...}
+ sub seconds     ($self) {...}
+ sub nanoseconds ($self) {...}
+ sub tz_name     ($self) {...}
+ sub tz_offset   ($self) {...}
+
+The remaining methods C<epoch()> and C<type()> may be inherited
+from the role. But you may also override them as required.
+Additionally, you may wish to provide a C<new()> constructor
+for your module.
+
+When no IANA time zone name is available, the C<tz_name()> method
+must generate it from the offset if possible. Note that the signs
+in IANA time zone names are reversed from the S<ISO definition>.
+Available zone names range from C<Etc/GMT-14> (east) over
+C<Etc/GMT> to C<Etc/GMT+12> (west).
+When no time zone offset is available, implementations may
+determine it from the IANA database, but this is not required.
+
+=head2 Duration
+
+See L<Neo4j::Types::Duration> for the methods defined by that role.
+
+The recommended way to have your own module perform the role
+is to write implementations for the following methods,
+then declare L<Neo4j::Types::Duration> as a parent type.
+
+ package Local::DateTime;
+ use parent 'Neo4j::Types::DateTime';
+ 
+ sub months      ($self) {...}
+ sub days        ($self) {...}
+ sub seconds     ($self) {...}
+ sub nanoseconds ($self) {...}
+
+You are free in your choice of the internal data structure.
+You may wish to provide a C<new()> constructor for your module.
 
 =head1 LIST AND MAP
 
