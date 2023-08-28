@@ -16,6 +16,18 @@ be better optimised for use with the respective driver.
 As long as each of them performs the appropriate role
 from L<Neo4j::Types>, they should all be interchangeable.
 
+=head1 ByteArray
+
+Neo4j::Types::Generic::ByteArray offers the following method
+in addition to the one defined in L<Neo4j::Types::ByteArray>.
+
+=head2 new
+
+ $bytearray = Neo4j::Types::Generic::ByteArray->new( $bytes );
+
+Create a new generic Neo4j byte array value.
+The parameter C<$bytes> is expected to be a scalar string.
+
 =head1 DateTime
 
 Neo4j::Types::Generic::DateTime offers the following methods
@@ -128,6 +140,8 @@ dimensions, this method returns C<undef>.
 =over
 
 =item * L<Neo4j::Types>
+
+=item * L<Neo4j::Types::ByteArray>
 
 =item * L<Neo4j::Types::DateTime>
 

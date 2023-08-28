@@ -1,0 +1,40 @@
+# PODNAME: Neo4j::Types::ByteArray
+# ABSTRACT: Represents a Neo4j byte array value
+
+=encoding UTF-8
+
+=head1 SYNOPSIS
+
+ $bytes = $bytearray->as_string;
+
+=head1 DESCRIPTION
+
+Represents a byte array value in Neo4j.
+Byte arrays are not a regular Cypher type, but are supported
+in Neo4j as a pass-through property type.
+
+Neo4j byte arrays may be returned from a Neo4j database server.
+Generic Neo4j byte array values may also be created locally.
+See L<Neo4j::Types::Generic/"ByteArray">.
+
+=head1 METHODS
+
+L<Neo4j::Types::ByteArray> specifies the following method.
+
+=head2 as_string
+
+ $bytes = $bytearray->as_string;
+
+Return the contents of the byte array as a scalar string.
+
+=head1 SEE ALSO
+
+=over
+
+=item * L<Neo4j::Types::Generic/"ByteArray">
+
+=item * L<Neo4j::Types::ImplementorNotes/"Byte array">
+
+=item * L<"Property types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#_property_types>
+
+=back

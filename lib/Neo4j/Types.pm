@@ -8,6 +8,7 @@ package Neo4j::Types;
 
 use warnings::register;
 
+use Neo4j::Types::ByteArray;
 use Neo4j::Types::DateTime;
 use Neo4j::Types::Duration;
 use Neo4j::Types::Node;

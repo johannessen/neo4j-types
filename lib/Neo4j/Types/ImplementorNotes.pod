@@ -248,19 +248,25 @@ and then follow whichever approach those other modules chose.
 
 The Cypher C<null> value can be neatly implemented as Perl C<undef>.
 
-=head2 Byte array
+=head2 Bytes
 
-Byte arrays are not actually Cypher types, but still have some
-limited support as pass-through values in Neo4j. In Perl, byte
-arrays are most efficiently represented as string scalars with
-their C<UTF8> flag turned off (though there may be some gotchas;
-see L<perlguts/"Working with SVs"> for details).
+Byte arrays are not first-class Cypher values, but still have
+some limited support as pass-through values in Neo4j.
+They may be represented in Perl as unblessed string scalars
+with their C<UTF8> flag turned off, or alternatively as
+L<Neo4j::Types::ByteArray>.
 
-However, it usually isn't possible to determine whether such a
-scalar actually is supposed to be a byte array or a string; see
-L<perlguts/"How can I recognise a UTF-8 string?">. In the future,
-the L<Neo4j::Types> distribution might be extended to offer ways
-to handle this.
+The recommended way to have your own module perform this role
+is to write an implementation for the following method,
+then declare L<Neo4j::Types::ByteArray> as a parent type.
+
+ package Local::ByteArray;
+ use parent 'Neo4j::Types::ByteArray';
+ 
+ sub as_string ($self) {...}
+
+You are free in your choice of the internal data structure.
+You may wish to provide a C<new()> constructor for your module.
 
 =head1 SPATIAL TYPES
 
