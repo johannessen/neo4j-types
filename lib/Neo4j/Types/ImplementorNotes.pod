@@ -270,27 +270,17 @@ L<Neo4j::Types::Point> as a parent type.
  package Local::Point;
  use parent 'Neo4j::Types::Point';
  
- sub new         ($class, $neo4j_srid, @coordinates) {...}
  sub srid        ($self) {...}
  sub coordinates ($self) {...}
- 
- sub X           ($self) {...}  # uppercase X
- sub longitude   ($self) {...}
- 
- sub Y           ($self) {...}  # uppercase Y
- sub latitude    ($self) {...}
- 
- sub Z           ($self) {...}  # uppercase Z
- sub height      ($self) {...}
 
-You are free in the choice of your own module's internal
-data structure. If you instead choose to use the generic
-implementation provided by L<Neo4j::Types::Point> itself, you
-should treat it as entirely opaque and should not access the
-data structure in any other way than through the methods
-specified in L<Neo4j::Types::Point>.
+You are free in your choice of the internal data structure.
+L<Neo4j::Types::Point> used to provide default implementations
+of all methods, but these have been moved to
+L<Neo4j::Types::Generic::Point> with version 2.00.
+The C<new()> method still exists for backwards compatibility,
+but it may be removed in future and should not be relied upon.
 
-It is recommended that all methods return a number for which
+It is recommended that all methods return numbers for which
 L<builtin/"created_as_number"> would be truthy
 (S<e. g.> C<0 + $srid>). This can make roundtrips easier.
 

@@ -6,7 +6,7 @@ use lib qw(lib);
 use Test::More 0.88;
 use Test::Exception;
 use Test::Warnings;
-use Neo4j::Types::Point;
+use Neo4j::Types::Generic::Point;
 
 plan tests => 9+3+3 + 9+3+3+3 + 6+6+6+6+1 + 1;
 
@@ -14,7 +14,7 @@ plan tests => 9+3+3 + 9+3+3+3 + 6+6+6+6+1 + 1;
 
 my (@c, $p);
 
-sub new_point { bless shift, 'Neo4j::Types::Point' }
+sub new_point { bless shift, 'Neo4j::Types::Generic::Point' }
 
 
 
@@ -77,49 +77,49 @@ is scalar ($p->coordinates), 2, 'scalar context string coords';
 
 
 @c = ( 42 );
-throws_ok { Neo4j::Types::Point->new( 4326, @c ) } qr/\bdimensions\b/i, 'new 4326 X fails';
-throws_ok { Neo4j::Types::Point->new( 4979, @c ) } qr/\bdimensions\b/i, 'new 4979 X fails';
-throws_ok { Neo4j::Types::Point->new( 7203, @c ) } qr/\bdimensions\b/i, 'new 7203 X fails';
-throws_ok { Neo4j::Types::Point->new( 9157, @c ) } qr/\bdimensions\b/i, 'new 9157 X fails';
-throws_ok { Neo4j::Types::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 X fails';
-throws_ok { Neo4j::Types::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef X fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 4326, @c ) } qr/\bdimensions\b/i, 'new 4326 X fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 4979, @c ) } qr/\bdimensions\b/i, 'new 4979 X fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 7203, @c ) } qr/\bdimensions\b/i, 'new 7203 X fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 9157, @c ) } qr/\bdimensions\b/i, 'new 9157 X fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 X fails';
+throws_ok { Neo4j::Types::Generic::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef X fails';
 
 @c = ( 2.294, 48.858 );
-$p = Neo4j::Types::Point->new( 4326, @c );
+$p = Neo4j::Types::Generic::Point->new( 4326, @c );
 is_deeply $p, new_point([ 4326, @c[0..1] ]), 'new 4326';
-throws_ok { Neo4j::Types::Point->new( 4979, @c ) } qr/\bdimensions\b/i, 'new 4979 XY fails';
-$p = Neo4j::Types::Point->new( 7203, @c );
+throws_ok { Neo4j::Types::Generic::Point->new( 4979, @c ) } qr/\bdimensions\b/i, 'new 4979 XY fails';
+$p = Neo4j::Types::Generic::Point->new( 7203, @c );
 is_deeply $p, new_point([ 7203, @c[0..1] ]), 'new 7203';
-throws_ok { Neo4j::Types::Point->new( 9157, @c ) } qr/\bdimensions\b/i, 'new 9157 XY fails';
-throws_ok { Neo4j::Types::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XY fails';
-throws_ok { Neo4j::Types::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XY fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 9157, @c ) } qr/\bdimensions\b/i, 'new 9157 XY fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XY fails';
+throws_ok { Neo4j::Types::Generic::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XY fails';
 
 @c = ( 2.294, 48.858, 396 );
-$p = Neo4j::Types::Point->new( 4326, @c );
+$p = Neo4j::Types::Generic::Point->new( 4326, @c );
 is_deeply $p, new_point([ 4326, @c[0..1] ]), 'new 4326 Z ignored';
-$p = Neo4j::Types::Point->new( 4979, @c );
+$p = Neo4j::Types::Generic::Point->new( 4979, @c );
 is_deeply $p, new_point([ 4979, @c ]), 'new 4979';
-$p = Neo4j::Types::Point->new( 7203, @c );
+$p = Neo4j::Types::Generic::Point->new( 7203, @c );
 is_deeply $p, new_point([ 7203, @c[0..1] ]), 'new 7203 Z ignored';
-$p = Neo4j::Types::Point->new( 9157, @c );
+$p = Neo4j::Types::Generic::Point->new( 9157, @c );
 is_deeply $p, new_point([ 9157, @c ]), 'new 9157';
-throws_ok { Neo4j::Types::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XYZ fails';
-throws_ok { Neo4j::Types::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XYZ fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XYZ fails';
+throws_ok { Neo4j::Types::Generic::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XYZ fails';
 
 @c = ( 2.294, 48.858, 396, 13 );
-$p = Neo4j::Types::Point->new( 4326, @c );
+$p = Neo4j::Types::Generic::Point->new( 4326, @c );
 is_deeply $p, new_point([ 4326, @c[0..1] ]), 'new 4326 ZM ignored';
-$p = Neo4j::Types::Point->new( 4979, @c );
+$p = Neo4j::Types::Generic::Point->new( 4979, @c );
 is_deeply $p, new_point([ 4979, @c[0..2] ]), 'new 4979 M ignored';
-$p = Neo4j::Types::Point->new( 7203, @c );
+$p = Neo4j::Types::Generic::Point->new( 7203, @c );
 is_deeply $p, new_point([ 7203, @c[0..1] ]), 'new 7203 ZM ignored';
-$p = Neo4j::Types::Point->new( 9157, @c );
+$p = Neo4j::Types::Generic::Point->new( 9157, @c );
 is_deeply $p, new_point([ 9157, @c[0..2] ]), 'new 9157 M ignored';
-throws_ok { Neo4j::Types::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XYZM fails';
-throws_ok { Neo4j::Types::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XYZM fails';
+throws_ok { Neo4j::Types::Generic::Point->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XYZM fails';
+throws_ok { Neo4j::Types::Generic::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XYZM fails';
 
 @c = ( undef, 45 );
-$p = Neo4j::Types::Point->new( 4326, @c );
+$p = Neo4j::Types::Generic::Point->new( 4326, @c );
 is_deeply $p, new_point([ 4326, @c[0..1] ]), 'new 4326 undef coord';
 
 

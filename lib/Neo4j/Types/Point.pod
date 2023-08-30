@@ -5,13 +5,10 @@
 
 =head1 SYNOPSIS
 
- $longitude  = $point->X;
- $latitude   = $point->Y;
- $height     = $point->Z;
  $neo4j_srid = $point->srid;
  
- @coords = ($x, $y, $z);
- $point  = Neo4j::Types::Point->new( $neo4j_srid, @coords );
+ @coordinates = $point->coordinates;
+ ($x, $y, $z) = $point->coordinates;
 
 =head1 DESCRIPTION
 
@@ -25,7 +22,10 @@ Supported in Neo4j S<version 3.4> and above.
 
 =head1 METHODS
 
-L<Neo4j::Types::Point> implements the following methods.
+L<Neo4j::Types::Point> specifies the following methods.
+Additionally, a C<new()> method is currently available
+as a backwards compatibility alias for C<new()> in
+L<Neo4j::Types::Generic/"Point">.
 
 =head2 coordinates
 
@@ -39,33 +39,6 @@ point (C<2> for points in two-dimensional coordinate systems,
 C<3> for three-dimensional systems).
 
  $dimensions = scalar $point->coordinates;
-
-=head2 height
-
- $value = $point->height;
-
-Alias for L<C<Z()>|/"Z">.
-
-=head2 latitude
-
- $value = $point->latitude;
-
-Alias for L<C<Y()>|/"Y">.
-
-=head2 longitude
-
- $value = $point->longitude;
-
-Alias for L<C<X()>|/"X">.
-
-=head2 new
-
- $point = Neo4j::Types::Point->new($neo4j_srid, @coordinates);
-
-Creates a new Point instance with the specified value.
-
-This method will fail if the SRID provided is not supported by Neo4j
-or if it requires a greater number of coordinates than provided.
 
 =head2 srid
 
@@ -152,40 +125,13 @@ not to mix different geodetic datums in the same database without
 considering the interoperability issues that this may cause, again
 particularly if more than a single client uses the Neo4j database.
 
-=head2 X
-
- $value = $point->X;
-
-Retrieve the point's first ordinate, also known as the abscissa.
-Commonly used for the horizontal axis in an Euclidean plane or for
-the geographical longitude.
-
-=head2 Y
-
- $value = $point->Y;
-
-Retrieve the point's second ordinate. Commonly used for the vertical
-axis in an Euclidean plane or for the geographical latitude.
-
-=head2 Z
-
- $value = $point->Z;
-
-Retrieve the point's third ordinate. Commonly used for height.
-
-For points in coordinate systems that have no more than two
-dimensions, this method returns an undefined value.
-
-=head1 BUGS
-
-There are currently no methods named C<x()>, C<y()>, or C<z()>.
-This is to avoid confusion with Perl's C<y///> operator.
-
 =head1 SEE ALSO
 
 =over
 
-=item * L<Neo4j::Types::ImplementorNotes/"Point">
+=item * L<Neo4j::Types::Generic/"Point">
+
+=item * L<Neo4j::Types::ImplementorNotes/"SPATIAL TYPES">
 
 =item * L<Neo4j::Driver::Type::Point>
 
