@@ -7,6 +7,7 @@ package Neo4j::Types::Point;
 
 
 sub new {
+	# uncoverable pod
 	warnings::warnif deprecated => "Deprecated: Use Neo4j::Types::Generic::Point->new() instead";
 	
 	require Neo4j::Types::Generic::Point;

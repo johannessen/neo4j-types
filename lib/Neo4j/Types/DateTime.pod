@@ -89,17 +89,6 @@ as referring to S<1 January 1970>.
 Return the nanoseconds since the start of the second identified
 by C<seconds()>. For C<DATE> values, return C<undef>.
 
-=begin comment
-
-=head2 new
-
- $dt = Neo4j::Types::DateTime->new( ... );
-
-Constructs a new generic Neo4j temporal instant value.
-See L<Neo4j::Types::Generic/"DateTime">.
-
-=end comment
-
 =head2 seconds
 
  $seconds = $dt->seconds;

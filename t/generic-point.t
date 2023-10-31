@@ -5,10 +5,16 @@ use lib qw(lib);
 
 use Test::More 0.88;
 use Test::Exception;
-use Test::Warnings;
+use Test::Warnings 0.010 qw(:no_end_test);
+my $no_warnings;
+use if $no_warnings = $ENV{AUTHOR_TESTING} ? 1 : 0, 'Test::Warnings';
+
 use Neo4j::Types::Generic::Point;
 
-plan tests => 9+3+3 + 9+3+3+3 + 6+6+6+6+1 + 1;
+
+# Extensions offered by the generic point implementation
+
+plan tests => 9+3+3 + 9+3+3+3 + 6+6+6+6+1 + 1 + $no_warnings;
 
 
 
@@ -121,6 +127,17 @@ throws_ok { Neo4j::Types::Generic::Point->new( undef, @c ) } qr/\bSRID\b/i, 'new
 @c = ( undef, 45 );
 $p = Neo4j::Types::Generic::Point->new( 4326, @c );
 is_deeply $p, new_point([ 4326, @c[0..1] ]), 'new 4326 undef coord';
+
+
+
+# Backwards compatibility alias
+
+@c = ( 9157, 56, 78, 90 );
+{
+	no warnings 'deprecated';
+	$p = Neo4j::Types::Point->new( @c );
+}
+is_deeply [$p->srid, $p->coordinates], [@c], 'Neo4j::Types::Point->new alias works';
 
 
 

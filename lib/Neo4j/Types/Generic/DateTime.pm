@@ -10,6 +10,7 @@ use parent 'Neo4j::Types::DateTime';
 
 
 sub new {
+	# uncoverable pod - see Generic.pod
 	my ($class, $dt, $tz) = @_;
 	
 	if (ref $dt eq '') {

@@ -14,6 +14,7 @@ use Carp qw(croak);
 my %DIM = ( 4326 => 2, 4979 => 3, 7203 => 2, 9157 => 3 );
 
 sub new {
+	# uncoverable pod - see Generic.pod
 	my ($class, $srid, @coordinates) = @_;
 	
 	croak "Points must have SRID" unless defined $srid;
@@ -24,15 +25,46 @@ sub new {
 }
 
 
-sub X { shift->[1] }
-sub Y { shift->[2] }
-sub Z { shift->[3] }
+sub X {
+	# uncoverable pod - see Generic.pod
+	return shift->[1];
+}
 
-sub longitude { shift->[1] }
-sub latitude  { shift->[2] }
-sub height    { shift->[3] }
 
-sub srid { shift->[0] }
+sub longitude {
+	# uncoverable pod - see Generic.pod
+	return shift->[1];
+}
+
+
+sub Y {
+	# uncoverable pod - see Generic.pod
+	return shift->[2];
+}
+
+
+sub latitude {
+	# uncoverable pod - see Generic.pod
+	return shift->[2];
+}
+
+
+sub Z {
+	# uncoverable pod - see Generic.pod
+	return shift->[3];
+}
+
+
+sub height {
+	# uncoverable pod - see Generic.pod
+	return shift->[3];
+}
+
+
+sub srid {
+	return shift->[0];
+}
+
 
 sub coordinates {
 	my @coordinates = @{$_[0]}[ 1 .. $#{$_[0]} ];

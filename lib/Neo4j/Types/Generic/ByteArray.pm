@@ -12,6 +12,7 @@ use Encode ();
 
 
 sub new {
+	# uncoverable pod - see Generic.pod
 	my ($class, $bytes) = @_;
 	
 	$bytes .= '';

@@ -10,6 +10,7 @@ use parent 'Neo4j::Types::Duration';
 
 
 sub new {
+	# uncoverable pod - see Generic.pod
 	my ($class, $params) = @_;
 	
 	$params->{$_} ||= 0 for qw( months days seconds nanoseconds );
