@@ -1,6 +1,6 @@
 Revision history for Neo4j::Types
 
-1.09  UNRELEASED
+1.10  UNRELEASED
 
  - Define scalar context for list methods to yield number of elements
  - Define properties() to behave the same in list context as in scalar context.
@@ -12,6 +12,7 @@ Revision history for Neo4j::Types
  - Add DateTime and Duration temporal types.
  - Fix loading of DateTime and Duration with "use Neo4j::Types".
  - Define methods and behaviour for the Neo4j 5 element ID.
+ - Raise minimum required version of Perl to v5.10.1.
 
 1.00  2021-01-18
 
