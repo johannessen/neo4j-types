@@ -1,6 +1,6 @@
 Revision history for Neo4j::Types
 
-1.08  UNRELEASED
+1.09  UNRELEASED
 
  - Define scalar context for list methods to yield number of elements
  - Define properties() to behave the same in list context as in scalar context.
@@ -10,6 +10,7 @@ Revision history for Neo4j::Types
  - Add Neo4j::Types::Generic namespace for generic type implementations.
  - Move spatial point implementation into Neo4j::Types::Generic namespace.
  - Add DateTime and Duration temporal types.
+ - Fix loading of DateTime and Duration with "use Neo4j::Types".
  - Define methods and behaviour for the Neo4j 5 element ID.
 
 1.00  2021-01-18
