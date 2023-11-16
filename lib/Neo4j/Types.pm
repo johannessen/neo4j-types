@@ -6,8 +6,6 @@ package Neo4j::Types;
 # ABSTRACT: Common Neo4j type system
 
 
-use warnings::register;
-
 use Neo4j::Types::ByteArray;
 use Neo4j::Types::DateTime;
 use Neo4j::Types::Duration;

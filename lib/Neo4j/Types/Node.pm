@@ -37,4 +37,11 @@ sub properties {
 }
 
 
+# Workaround for warnings::register_categories() being unavailable
+# in Perl v5.12 and earlier
+package Neo4j::Types;
+
+use warnings::register;
+
+
 1;
