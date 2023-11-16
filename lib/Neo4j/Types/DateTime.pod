@@ -40,7 +40,7 @@ or a time zone name from the IANA Olson database
 
 =back
 
-This role is designed to closely match the semantics of the
+This interface is designed to closely match the semantics of the
 Neo4j temporal types. For actually working with dates and times
 in Perl, the modules recommended by L<Task::Kensho::Dates> are
 better suited in most cases. The conversion is easiest using

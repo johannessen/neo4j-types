@@ -13,7 +13,7 @@ parameter.
 
 Neo4j drivers may provide similar packages, which might
 be better optimised for use with the respective driver.
-As long as each of them performs the appropriate role
+As long as each of them conforms to the appropriate interface
 from L<Neo4j::Types>, they should all be interchangeable.
 
 =head1 ByteArray

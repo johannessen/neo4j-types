@@ -13,12 +13,12 @@ Some Cypher types are fairly generic and seemingly straightforward to
 map to Perl. However, there are some pitfalls, which are discussed
 below. Other types (such as Neo4j nodes) are more specialised,
 requiring a custom Perl data structure. The L<Neo4j::Types>
-distribution defines roles (interfaces with method behaviours)
-that may be performed by such data structures.
+distribution defines interfaces with method behaviours
+that may be implemented by such data structures.
 
 B<You probably don't need to read this document,> unless you happen
-to be writing a Neo4j driver or other software that performs the
-L<Neo4j::Types> roles or inherits from these modules.
+to be writing a Neo4j driver or other software that inherits from
+L<Neo4j::Types> modules or conforms to their interface.
 
 =head1 STRUCTURAL TYPES
 
@@ -35,7 +35,7 @@ They may be represented as:
 
 =back
 
-These modules should be treated as roles. A role defines an
+These modules should be treated as definitions of an
 object-oriented interface with specific behaviour for others
 to implement.
 
@@ -54,9 +54,10 @@ currently doesn't discuss these methods.
 
 =head2 Node
 
-See L<Neo4j::Types::Node> for the methods defined by that role.
+See L<Neo4j::Types::Node> for the methods defined for that
+module's interface.
 
-The recommended way to have your own module perform the role
+The recommended way to have your own module conform to the interface
 is to write implementations for all the methods, then declare
 L<Neo4j::Types::Node> as a parent type.
 
@@ -110,9 +111,9 @@ the idiom C<< exists $node->properties->{$key} >>.
 =head2 Relationship
 
 See L<Neo4j::Types::Relationship> for the methods defined
-by that role.
+for that module's interface.
 
-The recommended way to have your own module perform the role
+The recommended way to have your own module conform to the interface
 is to write implementations for all the methods, then declare
 L<Neo4j::Types::Relationship> as a parent type.
 
@@ -153,9 +154,10 @@ on L<nodes|/"Node"> apply.
 
 =head2 Path
 
-See L<Neo4j::Types::Path> for the methods defined by that role.
+See L<Neo4j::Types::Path> for the methods defined for that
+module's interface.
 
-The recommended way to have your own module perform the role
+The recommended way to have your own module conform to the interface
 is to write implementations for all the methods, then declare
 L<Neo4j::Types::Path> as a parent type.
 
@@ -293,9 +295,10 @@ They may be represented in Perl as unblessed string scalars
 with their C<UTF8> flag turned off, or alternatively as
 L<Neo4j::Types::ByteArray>.
 
-The recommended way to have your own module perform this role
-is to write an implementation for the following method,
-then declare L<Neo4j::Types::ByteArray> as a parent type.
+The recommended way to have your own module conform to
+the L<Neo4j::Types::ByteArray> interface is to write an
+implementation for the following method, then declare
+that module as a parent type.
 
  package Local::ByteArray;
  use parent 'Neo4j::Types::ByteArray';
@@ -324,9 +327,10 @@ pairs as a simple list in the Neo4j database instead.
 
 =head2 Point
 
-See L<Neo4j::Types::Point> for the methods defined by that role.
+See L<Neo4j::Types::Point> for the methods defined for that
+module's interface.
 
-The recommended way to have your own module perform the role
+The recommended way to have your own module conform to the interface
 is to write implementations for all the methods, then declare
 L<Neo4j::Types::Point> as a parent type.
 
@@ -361,15 +365,16 @@ They may be represented as:
 
 =back
 
-These modules should be treated as roles. A role defines an
+These modules should be treated as definitions of an
 object-oriented interface with specific behaviour for others
 to implement.
 
 =head2 DateTime
 
-See L<Neo4j::Types::DateTime> for the methods defined by that role.
+See L<Neo4j::Types::DateTime> for the methods defined for that
+module's interface.
 
-The recommended way to have your own module perform the role
+The recommended way to have your own module conform to the interface
 is to write implementations for at least the following methods,
 then declare L<Neo4j::Types::DateTime> as a parent type.
 
@@ -382,8 +387,9 @@ then declare L<Neo4j::Types::DateTime> as a parent type.
  sub tz_name     ($self) {...}
  sub tz_offset   ($self) {...}
 
-The remaining methods C<epoch()> and C<type()> may be inherited
-from the role. But you may also override them as required.
+Implementations for the remaining methods C<epoch()> and
+C<type()> are provided in L<Neo4j::Types::DateTime> and you
+may inherit them. But you may also override them as required.
 Additionally, you may wish to provide a C<new()> constructor
 for your module.
 
@@ -397,9 +403,10 @@ determine it from the IANA database, but this is not required.
 
 =head2 Duration
 
-See L<Neo4j::Types::Duration> for the methods defined by that role.
+See L<Neo4j::Types::Duration> for the methods defined for that
+module's interface.
 
-The recommended way to have your own module perform the role
+The recommended way to have your own module conform to the interface
 is to write implementations for the following methods,
 then declare L<Neo4j::Types::Duration> as a parent type.
 
