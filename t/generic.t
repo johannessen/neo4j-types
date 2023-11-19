@@ -23,13 +23,13 @@ plan tests => 5 + $no_warnings;
 neo4j_bytearray_ok 'Neo4j::Types::Generic::ByteArray', sub {
 	my ($class, $params) = @_;
 	Neo4j::Types::Generic::ByteArray->new($params->{as_string});
-};
+}, 'generic ByteArray';
 
 
 neo4j_datetime_ok 'Neo4j::Types::Generic::DateTime', sub {
 	my ($class, $params) = @_;
 	Neo4j::Types::Generic::DateTime->new($params);
-};
+}, 'generic DateTime';
 
 neo4j_datetime_ok 'Neo4j::Types::Generic::DateTime', sub {
 	my ($class, $params) = @_;
@@ -40,13 +40,13 @@ neo4j_datetime_ok 'Neo4j::Types::Generic::DateTime', sub {
 	my $epoch = $params->{days} * 86400 + $params->{seconds};
 	my $tz = $params->{tz_name} // $params->{tz_offset};
 	return Neo4j::Types::Generic::DateTime->new($epoch, $tz);
-}, 'epoch syntax neo4j_datetime_ok';
+}, 'generic DateTime using epoch in constructor';
 
 
 neo4j_duration_ok 'Neo4j::Types::Generic::Duration', sub {
 	my ($class, $params) = @_;
 	Neo4j::Types::Generic::Duration->new($params);
-};
+}, 'generic Duration';
 
 
 neo4j_point_ok 'Neo4j::Types::Generic::Point', sub {
@@ -55,7 +55,7 @@ neo4j_point_ok 'Neo4j::Types::Generic::Point', sub {
 		$params->{srid},
 		@{$params->{coordinates}},
 	);
-};
+}, 'generic Point';
 
 
 done_testing;
