@@ -1,0 +1,80 @@
+---
+name: Build and Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+    container:
+      image: perldocker/perl-tester:5.38
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          dzil authordeps --missing | cpanm -nq
+          dzil listdeps --missing --author | cpanm -nq
+      - name: Run unit tests
+        run: dzil test
+        env:
+          AUTOMATED_TESTING: 1
+          NONINTERACTIVE_TESTING: 1
+          EXTENDED_TESTING: 1
+          RELEASE_TESTING: 1
+          AUTHOR_TESTING: 1
+          NO_NETWORK_TESTING: 1
+      - name: Build
+        run: dzil build --no-tgz --in build_dir
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build_dir
+          path: build_dir
+          retention-days: 1
+
+  test-linux:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl:
+          - "5.10"
+          - "5.16"
+          - "5.20"
+          - "5.26"
+          - "5.30"
+          - "5.36"
+          - "5.38"
+      fail-fast: true
+    name: Perl ${{ matrix.perl }}
+    steps:
+      - name: Install Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Get distribution
+        uses: actions/download-artifact@v3
+        with:
+          name: build_dir
+          path: .
+      - name: Install distribution dependencies
+        uses: perl-actions/install-with-cpanm@stable
+        with:
+          cpanfile: "cpanfile"
+          args: "-q --with-recommends --skip-satisfied"
+      - name: Test
+        run: prove -lr t
+        env:
+          AUTOMATED_TESTING: 1
+          NONINTERACTIVE_TESTING: 1
+          EXTENDED_TESTING: 1
+          RELEASE_TESTING: 1
+          AUTHOR_TESTING: 1
