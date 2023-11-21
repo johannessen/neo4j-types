@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Neo4j::Types::Node;
-# ABSTRACT: Describes a node from a Neo4j graph
+# ABSTRACT: Represents a Neo4j node / graph vertex
 
 
 

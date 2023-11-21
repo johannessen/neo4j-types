@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Neo4j::Types::Relationship;
-# ABSTRACT: Describes a relationship from a Neo4j graph
+# ABSTRACT: Represents a Neo4j relationship / graph edge
 
 
 

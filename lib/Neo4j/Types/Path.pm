@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Neo4j::Types::Path;
-# ABSTRACT: Represents a directed sequence of relationships between two nodes
+# ABSTRACT: Represents a Neo4j path of nodes and relationships
 
 
 

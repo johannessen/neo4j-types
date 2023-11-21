@@ -1,5 +1,5 @@
 # PODNAME: Neo4j::Types::Relationship
-# ABSTRACT: Describes a relationship from a Neo4j graph
+# ABSTRACT: Represents a Neo4j relationship / graph edge
 
 =encoding UTF-8
 
@@ -59,10 +59,6 @@ unavailable, for example because this module is used with Neo4j
 server S<version 4> or earlier, this method will issue a
 warning in the C<Neo4j::Types> category and return the legacy
 S<numeric ID> instead; see L<C<id()>|/"id">.
-
-=for comment
-Note that a S<numeric ID> cannot successfully be used
-with C<elementId()> in Cypher expressions.
 
 =head2 get
 
@@ -136,16 +132,14 @@ Return the type of this relationship.
 
 =over
 
+=item * L<Neo4j::Types>
+
 =item * L<Neo4j::Types::B<Node>>
 
 =item * L<Neo4j::Types::ImplementorNotes/"Relationship">
 
 =item * L<Neo4j::Bolt::Relationship>
 
-=item * L<Neo4j::Driver::Type::Relationship>
-
-=item * L<REST::Neo4p::Relationship>
-
-=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#structural-types>
+=item * L<Neo4j::Driver::Types>
 
 =back

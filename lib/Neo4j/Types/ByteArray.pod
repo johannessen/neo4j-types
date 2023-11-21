@@ -31,10 +31,14 @@ Return the contents of the byte array as a scalar string.
 
 =over
 
+=item * L<Neo4j::Types>
+
 =item * L<Neo4j::Types::Generic/"ByteArray">
 
-=item * L<Neo4j::Types::ImplementorNotes/"Byte array">
+=item * L<Neo4j::Types::ImplementorNotes/"Bytes">
 
-=item * L<"Property types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#_property_types>
+=item * L<Neo4j::Bolt::Bytes>
+
+=item * L<Neo4j::Driver::Types>
 
 =back

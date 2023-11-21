@@ -1,5 +1,5 @@
 # PODNAME: Neo4j::Types::Path
-# ABSTRACT: Represents a directed sequence of relationships between two nodes
+# ABSTRACT: Represents a Neo4j path of nodes and relationships
 
 =encoding UTF-8
 
@@ -71,16 +71,14 @@ The length of a path is defined as the number of relationships.
 
 =over
 
+=item * L<Neo4j::Types>
+
 =item * L<Neo4j::Types::B<Node>>, L<Neo4j::Types::B<Relationship>>
 
 =item * L<Neo4j::Types::ImplementorNotes/"Path">
 
 =item * L<Neo4j::Bolt::Path>
 
-=item * L<Neo4j::Driver::Type::Path>
-
-=item * L<REST::Neo4p::Path>
-
-=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#structural-types>
+=item * L<Neo4j::Driver::Types>
 
 =back

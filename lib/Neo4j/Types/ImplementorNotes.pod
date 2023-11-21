@@ -1,5 +1,5 @@
 # PODNAME: Neo4j::Types::ImplementorNotes
-# ABSTRACT: Guidance for driver implementors
+# ABSTRACT: Guidance for driver authors
 
 =encoding UTF-8
 
@@ -40,10 +40,11 @@ object-oriented interface with specific behaviour for others
 to implement.
 
 While these modules currently offer default implementations of
-all methods, it is strongly recommended for implementors to
+most methods, it is B<strongly recommended> for implementors to
 write their own method implementations for their own data
 structures in order to maintain encapsulation and to reduce
-the risk of action at a distance.
+the risk of action at a distance. The default implementations
+may be removed in future and should not be relied upon.
 
 The methods defined by this distribution are loosely modelled
 on the Neo4j Driver API. They don't match that API precisely
@@ -205,7 +206,7 @@ to calculate an expression if necessary (like for C<1 + 0.5>), so
 the distinction between integers and floats often doesn't matter.
 However, integers and floats are both just scalars in Perl, which
 may make it difficult to create a float with an integer value in
-Neo4j (for example, trying to store C<$a = 2.0 + 1> as a property
+Neo4j (for example, trying to store C<$x = 2.0 + 1> as a property
 may result in the integer C<3> being stored in Neo4j).
 
 L<perlnumber> explains further details on type conversions in Perl.
@@ -217,13 +218,18 @@ consequences, as the following example demonstrates.
  say "The ID is $id.";           # silently turns $id into a string
  $node = get_node_by_id($id);    # fails: ID must be integer
 
-This latter situation may be solved by using unary coercions.
+Implementations can avoid this latter problem on Perl
+L<versions 5.35.9|perl5360delta/"Internal Changes"> and newer,
+which offer stable tracking of whether a value was initially
+created as number or as string. On earlier Perl versions, the
+onus to avoid it is on users, who need to use unary coercions.
 
- $string = "$number";
- $number = 0 + $string;
+ $string = '' . $number;
+ $number =  0 + $string;
 
-In the future, the L<Neo4j::Types> distribution might be extended
-to offer ways to better handle the issues described in this section.
+The L<JSON::Types> distribution offers a way to do unary
+coercions in a way that might be more expressive.
+In future, L<Neo4j::Types> might be extended in a similar fashion.
 
 Note that while Neo4j easily handles the special floating point
 values -0.0, NaN and ±Infinity, Perl support for these values has
@@ -283,7 +289,7 @@ L<makamaka/JSON-PP#49|https://github.com/makamaka/JSON-PP/issues/49>.)
 
 Optionally, your implementation may offer users a way
 to choose the boolean values. This document makes no
-recommendation as to the interface for such an option.
+recommendation as to the interface for such a setting.
 
 =for comment
 Some of the Perl JSON modules are currently (2023) in the
@@ -327,14 +333,6 @@ It might be possible to (crudely) represent other spatial types by
 using a list of points plus external metadata, or in a Neo4j graph
 by treating the graph itself as a spatial representation.
 
-The coordinate reference systems of spatial points in Neo4j are
-currently severely constrained. There is no way to tag points with
-the CRS they actually use, and for geographic coordinates (lat/lon),
-only a single, subtly non-standard CRS is even supported. For uses
-that don't require the spatial functions that Neo4j offers, it might
-be best to eschew the point type completely and store coordinate
-pairs as a simple list in the Neo4j database instead.
-
 =head2 Point
 
 See L<Neo4j::Types::Point> for the methods defined for that
@@ -354,8 +352,9 @@ You are free in your choice of the internal data structure.
 L<Neo4j::Types::Point> used to provide default implementations
 of all methods, but these have been moved to
 L<Neo4j::Types::Generic::Point> with version 2.00.
-The C<new()> method still exists for backwards compatibility,
-but it may be removed in future and should not be relied upon.
+The C<new()> method in L<Neo4j::Types::Point> still exists for
+backwards compatibility, but it may be removed in future and
+should not be relied upon.
 
 It is recommended that all methods return numbers for which
 L<builtin/"created_as_number"> would be truthy
@@ -406,10 +405,15 @@ for your module.
 When no IANA time zone name is available, the C<tz_name()> method
 must generate it from the offset if possible. Note that the signs
 in IANA time zone names are reversed from the S<ISO definition>.
-Available zone names range from C<Etc/GMT-14> (east) over
-C<Etc/GMT> to C<Etc/GMT+12> (west).
+Available zone names range from C<Etc/GMT-14> (east)
+to C<Etc/GMT+12> (west).
+
 When no time zone offset is available, implementations may
 determine it from the IANA database, but this is not required.
+
+It is recommended that numbers returned by methods are values
+for which L<builtin/"created_as_number"> would be truthy
+(S<e. g.> C<0 + $days>). This can make roundtrips easier.
 
 =head2 Duration
 
@@ -431,13 +435,17 @@ then declare L<Neo4j::Types::Duration> as a parent type.
 You are free in your choice of the internal data structure.
 You may wish to provide a C<new()> constructor for your module.
 
+It is recommended that all methods return numbers for which
+L<builtin/"created_as_number"> would be truthy
+(S<e. g.> C<0 + $days>). This can make roundtrips easier.
+
 =head1 LIST AND MAP
 
 Constructed types, formerly known as composite types, are:
 
 =over
 
-=item * List
+=item * List (also known as Array)
 
 =item * Map (also known as Dictionary)
 
@@ -448,14 +456,36 @@ references very nicely.
 
 =head1 SEE ALSO
 
+Generic implementations of some types are available, see
+L<Neo4j::Types::Generic>. Their constructors currently bless
+to C<__PACKAGE__> to discourage inheritance (subject to change).
+The source code of generic types might be of interest.
+
+A number of Perl distributions implement Cypher types:
+
 =over
 
 =item * L<Neo4j::Bolt/"Return Types">
 
-=item * L<Neo4j::Driver::Record/"get">
+=item * L<Neo4j::Driver::Types>
 
 =item * L<REST::Neo4p::Entity>
 
-=item * L<"Values and types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/>
+=back
+
+Not all of these aim to conform to L<Neo4j::Types>.
+The source code of those that do might be of interest.
+
+Several parts of the Neo4j documentation deal with types:
+
+=over
+
+=item * L<Bolt Protocol documentation|https://neo4j.com/docs/bolt/current/>
+
+=item * L<Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/current/>
+
+=item * L<Neo4j Java Driver|https://neo4j.com/docs/api/java-driver/current/>
+
+=item * L<Neo4j Python Driver|https://neo4j.com/docs/api/python-driver/current/>
 
 =back

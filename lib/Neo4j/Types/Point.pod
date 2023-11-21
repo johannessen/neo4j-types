@@ -5,7 +5,7 @@
 
 =head1 SYNOPSIS
 
- $neo4j_srid = $point->srid;
+ $neo4j_srid  = $point->srid;
  
  @coordinates = $point->coordinates;
  ($x, $y, $z) = $point->coordinates;
@@ -13,12 +13,23 @@
 =head1 DESCRIPTION
 
 Represents a spatial point value in Neo4j. Includes coordinates in
-two or three dimensions and a SRID that may define their semantics.
+two or three dimensions and an SRID that may define their semantics.
 
 The SRID and thereby the coordinate semantics are defined by Neo4j.
 See L</"srid"> for details.
 
-Supported in Neo4j S<version 3.4> and above.
+The coordinate reference systems of spatial points in Neo4j are
+currently severely constrained. There is no way to tag points with
+the CRS they actually use, and for geographic coordinates (lat/lon),
+only a single, subtly non-standard CRS is even supported.
+This deviates from common OGC standards for geospatial databases.
+Prudence suggests to expect future changes in Neo4j. Such changes
+would likely necessitate breaking changes to this module.
+For uses that don't require the spatial functions that Neo4j offers,
+it might be best to eschew the point type completely and store
+coordinate tuples as a simple list in the Neo4j database instead.
+
+I<Supported in Neo4j S<version 3.4> and above.>
 
 =head1 METHODS
 
@@ -129,12 +140,14 @@ particularly if more than a single client uses the Neo4j database.
 
 =over
 
+=item * L<Neo4j::Types>
+
 =item * L<Neo4j::Types::Generic/"Point">
 
-=item * L<Neo4j::Types::ImplementorNotes/"SPATIAL TYPES">
+=item * L<Neo4j::Types::ImplementorNotes/"Point">
 
-=item * L<Neo4j::Driver::Type::Point>
+=item * L<Neo4j::Bolt::Point>
 
-=item * L<"Spatial values" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/spatial/>
+=item * L<Neo4j::Driver::Types>
 
 =back

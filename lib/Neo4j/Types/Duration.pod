@@ -13,7 +13,7 @@
 =head1 DESCRIPTION
 
 Represents a temporal duration value in Neo4j.
-Includes month, days, seconds, and nanoseconds components,
+Includes months, days, seconds, and nanoseconds components,
 which are all expressed as integer numbers.
 The length of the duration is defined by the combination
 of these four components.
@@ -22,7 +22,7 @@ Duration values may be returned from a Neo4j database server.
 Generic Duration values may also be created locally.
 See L<Neo4j::Types::Generic/"Duration">.
 
-Supported in Neo4j S<version 3.4> and above.
+I<Supported in Neo4j S<version 3.4> and above.>
 
 =head1 METHODS
 
@@ -56,10 +56,14 @@ Return the size of the "seconds" component of this duration.
 
 =over
 
+=item * L<Neo4j::Types>
+
 =item * L<Neo4j::Types::Generic/"Duration">
 
-=item * L<Neo4j::Types::ImplementorNotes/"TEMPORAL TYPES">
+=item * L<Neo4j::Types::ImplementorNotes/"Duration">
 
-=item * L<"Temporal values" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/temporal/>
+=item * L<Neo4j::Bolt::Duration>
+
+=item * L<Neo4j::Driver::Types>
 
 =back

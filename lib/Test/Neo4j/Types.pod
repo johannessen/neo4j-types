@@ -52,8 +52,8 @@ It's possible that the checks these tools perform will be
 expanded in future. If this worries you, you should consider
 only using these tools for author tests.
 That said, if your code is on CPAN and declares this module
-as a dependency, the author of this module will try to make every
-effort to avoid problems caused by such changes.
+as a dependency, the maintainer of this module will try to
+make every effort to avoid problems caused by such changes.
 
 =head1 FUNCTIONS
 

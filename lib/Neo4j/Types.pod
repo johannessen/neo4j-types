@@ -64,6 +64,6 @@ see L<Neo4j::Types::ImplementorNotes>.
 
 =item * L<Neo4j::Driver>
 
-=item * L<"Values and types" in the Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/>
+=item * "Values and types" in the L<Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/current/>
 
 =back

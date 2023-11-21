@@ -1,5 +1,5 @@
 # PODNAME: Neo4j::Types::Node
-# ABSTRACT: Describes a node from a Neo4j graph
+# ABSTRACT: Represents a Neo4j node / graph vertex
 
 =encoding UTF-8
 
@@ -53,10 +53,6 @@ server S<version 4> or earlier, this method will issue a
 warning in the C<Neo4j::Types> category and return the legacy
 S<numeric ID> instead; see L<C<id()>|/"id">.
 
-=for comment
-Note that a S<numeric ID> cannot successfully be used
-with C<elementId()> in Cypher expressions.
-
 =head2 get
 
  $value = $node->get('property_key');
@@ -105,14 +101,12 @@ by L<Neo4j::Types>.
 
 =over
 
+=item * L<Neo4j::Types>
+
 =item * L<Neo4j::Types::ImplementorNotes/"Node">
 
 =item * L<Neo4j::Bolt::Node>
 
-=item * L<Neo4j::Driver::Type::Node>
-
-=item * L<REST::Neo4p::Node>
-
-=item * L<"Structural types" in Neo4j Cypher Manual|https://neo4j.com/docs/cypher-manual/5/values-and-types/property-structural-constructed/#structural-types>
+=item * L<Neo4j::Driver::Types>
 
 =back
