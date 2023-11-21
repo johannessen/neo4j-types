@@ -101,6 +101,16 @@ currently also handle C<undef> in the data structure for bug
 compatibility with L<Neo4j::Bolt::CTypeHandlers>, but this may
 change in future.)
 
+For optimal performance, it is recommended for C<properties()>
+to always return a reference to the same hash. While it is
+legal to make a new defensive copy every time the method is
+called or to return a reference to a tied readonly hash, you
+should consider the performance and usability problems this may
+cause. Note that L<locked hashes|Hash::Util/"Restricted hashes">
+would cause an exception on trying to access a non-existent
+property, which is not allowed. Make sure any non-standard
+behaviour your implementation may have is well documented.
+
 Trying to access a property that doesn't exist must yield the
 scalar value C<undef>, both for the C<get()> method as well as
 the hash reference returned by C<properties()>. Expect users who

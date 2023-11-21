@@ -90,9 +90,13 @@ Nodes and relationships do not share the same ID space.
 =head2 properties
 
  $hashref = $relationship->properties;
- $value = $hashref->{property_key};
+ $value   = $relationship->properties->{property_key};
 
 Return all properties of this relationship as a hash reference.
+
+This hash reference should be used for read access only.
+The result of attempts to change this hash is not defined
+by L<Neo4j::Types>.
 
 =head2 start_element_id
 
@@ -127,12 +131,6 @@ See L<Neo4j::Types::Node/"id">.
  $type = $relationship->type;
 
 Return the type of this relationship.
-
-=head1 BUGS
-
-The effect of making changes to the contents of the hash
-to which a reference is returned from the C<properties()>
-method has not yet been defined.
 
 =head1 SEE ALSO
 

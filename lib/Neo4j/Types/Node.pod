@@ -93,14 +93,13 @@ In scalar context, return the number of labels on this node.
 =head2 properties
 
  $hashref = $node->properties;
+ $value   = $node->properties->{property_key};
 
 Return all properties of this node as a hash reference.
 
-=head1 BUGS
-
-The effect of making changes to the contents of the hash
-to which a reference is returned from the C<properties()>
-method has not yet been defined.
+This hash reference should be used for read access only.
+The result of attempts to change this hash is not defined
+by L<Neo4j::Types>.
 
 =head1 SEE ALSO
 

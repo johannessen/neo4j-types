@@ -1,6 +1,6 @@
 Revision history for Neo4j::Types
 
-1.14  UNRELEASED
+1.15  UNRELEASED
 
  - Define scalar context for list methods to yield number of elements
  - Define properties() to behave the same in list context as in scalar context.
@@ -18,6 +18,8 @@ Revision history for Neo4j::Types
  - Automatically register the custom warning category when it might be needed.
  - Avoid the term "role" in the documentation.
  - Include Test::Neo4j::Types 0.08 in this distribution.
+ - Specify that the result of changing the properties() hash contents is not
+   defined here.
 
 1.00  2021-01-18
 
