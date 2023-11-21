@@ -1,25 +1,28 @@
 Revision history for Neo4j::Types
 
-1.15  UNRELEASED
+2.00  2023-11-21
 
- - Define scalar context for list methods to yield number of elements
- - Define properties() to behave the same in list context as in scalar context.
- - Define result of reading a non-existent property to be undef.
- - Clarify that labels() and properties() must not return undef.
- - Recommend that users don't inherit type implementations from these modules.
- - Add Neo4j::Types::Generic namespace for generic type implementations.
- - Move spatial point implementation into Neo4j::Types::Generic namespace.
- - Add DateTime and Duration temporal types.
- - Fix loading of DateTime and Duration with "use Neo4j::Types".
- - Define methods and behaviour for the Neo4j 5 element ID.
+ - Add ByteArray, DateTime, and Duration types. (GH #15, #17)
+
+ - Define methods and behaviour for the Neo4j 5 element ID. (GH #13)
+
+ - Specify previously undefined behaviour. (GH #1, #11, #14)
+
+ - Expand the implementor guidance for driver authors and separate it
+   from the type definitions aimed at users.
+
+ - Separate generic type implementations from the type definitions.
+
+    - Rename the package of the generic spatial point implementation
+      to Neo4j::Types::Generic::Point. (GH #16)
+
+    - Caution driver authors against depending upon internal implementation
+      details of Neo4j:Types modules. (GH #4)
+
+ - Offer test tools to help driver authors with conforming to these types.
+
  - Raise minimum required version of Perl to v5.10.1.
- - Add ByteArray type.
- - Specify the boolean values to be used (core bools on v5.36+).
- - Automatically register the custom warning category when it might be needed.
- - Avoid the term "role" in the documentation.
- - Include Test::Neo4j::Types 0.08 in this distribution.
- - Specify that the result of changing the properties() hash contents is not
-   defined here.
+
 
 1.00  2021-01-18
 
