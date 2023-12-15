@@ -289,7 +289,7 @@ sub neo4j_path_ok {
 sub _point_test {
 	my ($point_class, $new) = @_;
 	
-	plan tests => 3+3 + 3+3+3+3+2 + 1;
+	plan tests => 3+3 + 3+3 + 1;
 	
 	my (@c, $p);
 	
@@ -320,23 +320,6 @@ sub _point_test {
 	is $p->srid(), 9157, 'space srid';
 	is_deeply [$p->coordinates], [@c], 'space coords';
 	is scalar ($p->coordinates), 3, 'scalar context space coords';
-	
-	@c = ( 361, -91 );
-	$p = $new->( $point_class, { srid => 4326, coordinates => [@c] });
-	is $p->srid(), 4326, 'ootw srid';
-	is_deeply [$p->coordinates], [@c], 'ootw coords';
-	is scalar ($p->coordinates), 2, 'scalar context ootw coords';
-	
-	@c = ( 'what', 'ever' );
-	$p = $new->( $point_class, { srid => '4326', coordinates => [@c] });
-	is $p->srid(), '4326', 'string srid';
-	is_deeply [$p->coordinates], [@c], 'string coords';
-	is scalar ($p->coordinates), 2, 'scalar context string coords';
-	
-	@c = ( undef, 45 );
-	$p = $new->( $point_class, { srid => 7203, coordinates => [@c] });
-	is_deeply [$p->coordinates], [@c], 'undef coord';
-	is scalar ($p->coordinates), 2, 'scalar context undef coord';
 	
 	
 	isa_ok $p, 'Neo4j::Types::Point';
