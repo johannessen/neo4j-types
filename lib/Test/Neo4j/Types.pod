@@ -125,7 +125,7 @@ L<Neo4j::Types::Duration>:
 
  $params = {
    months      => 18,      # 1.5 years
-   days        => 42,      # 12 weeks
+   days        => 42,      # 6 weeks
    seconds     => 172800,  # 48 hours
    nanoseconds => 0,
  };
@@ -250,7 +250,7 @@ are implemented as simple subtests. You can run C<prove -v> and
 obtain details about any failing checks, but you'll probably
 have to compare the TAP output with this modules's source code
 to make sense of them. Unfortunately, the tool source code is
-more optimised for compactness that for readability, which of
+more optimised for compactness than for readability, which of
 course means me asking people to "just read the code" is quite
 shameless. However, because the number of users this module
 is anticipated to have is very low (maybe two or so), this

@@ -424,8 +424,8 @@ The recommended way to have your own module conform to the interface
 is to write implementations for the following methods,
 then declare L<Neo4j::Types::Duration> as a parent type.
 
- package Local::DateTime;
- use parent 'Neo4j::Types::DateTime';
+ package Local::Duration;
+ use parent 'Neo4j::Types::Duration';
  
  sub months      ($self) {...}
  sub days        ($self) {...}
