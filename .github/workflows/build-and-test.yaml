@@ -34,7 +34,7 @@ jobs:
           NO_NETWORK_TESTING: 1
       - name: Build
         run: dzil build --no-tgz --in build_dir
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: build_dir
           path: build_dir
@@ -61,7 +61,7 @@ jobs:
         with:
           perl-version: ${{ matrix.perl }}
       - name: Get distribution
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build_dir
           path: .
